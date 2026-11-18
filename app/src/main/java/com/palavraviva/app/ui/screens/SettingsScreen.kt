@@ -1,5 +1,7 @@
 package com.palavraviva.app.ui.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,25 +13,37 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.palavraviva.app.data.prefs.AppearanceMode
+import com.palavraviva.app.data.prefs.AppearancePrefs
 import com.palavraviva.app.ui.theme.Gold
+import com.palavraviva.app.ui.theme.NightInk
+import com.palavraviva.app.ui.theme.Paper
 import com.palavraviva.app.ui.theme.Sepia
-import com.palavraviva.app.ui.theme.NightCard
-
-enum class ReadTheme(val label: String, val bg: Color, val fg: Color) {
-    LIGHT("Claro", Color(0xFFFAF7F0), Color(0xFF1B1B33)),
-    SEPIA("Sépia", Sepia, Color(0xFF4A3B28)),
-    DARK("Escuro", Color(0xFF12122A), Color(0xFFF0EDF7)),
-}
+import com.palavraviva.app.ui.theme.SepiaInk
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(nav: NavController) {
-    var theme by remember { mutableStateOf(ReadTheme.LIGHT) }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    // Aparência global: carregada do DataStore e aplicada ao tema do app.
+    var appearance by remember { mutableStateOf(AppearanceMode.AUTO) }
     var fontSize by remember { mutableStateOf(17f) }
     var versesPerLine by remember { mutableStateOf(true) }
-    var autoNight by remember { mutableStateOf(false) }
+
+    LaunchedEffect(context) {
+        AppearancePrefs.mode(context).collect { appearance = it }
+    }
+
+    fun selectAppearance(mode: AppearanceMode) {
+        appearance = mode
+        scope.launch { AppearancePrefs.setMode(context, mode) }
+    }
 
     Column(
         Modifier
@@ -48,7 +62,7 @@ fun SettingsScreen(nav: NavController) {
             Text("Aparência & leitura", style = MaterialTheme.typography.titleMedium)
         }
 
-        // Tema
+        // Aparência (Automático / Claro / Sépia / Escuro)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,46 +70,38 @@ fun SettingsScreen(nav: NavController) {
             shape = RoundedCornerShape(18.dp),
         ) {
             Column(Modifier.padding(16.dp)) {
-                Text("TEMA", style = MaterialTheme.typography.labelSmall)
+                Text("APARÊNCIA", style = MaterialTheme.typography.labelSmall)
                 Spacer(Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    ReadTheme.entries.forEach { t ->
+                    AppearanceMode.entries.forEach { mode ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.weight(1f),
                         ) {
                             Surface(
+                                onClick = { selectAppearance(mode) },
                                 shape = RoundedCornerShape(10.dp),
-                                border = if (theme == t)
-                                    androidx.compose.foundation.BorderStroke(2.dp, Gold)
-                                else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                                border = if (appearance == mode)
+                                    BorderStroke(2.dp, Gold)
+                                else BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                             ) {
-                                Column(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .background(t.bg)
-                                        .padding(12.dp),
-                                ) {
-                                    repeat(3) { i ->
-                                        Box(
-                                            Modifier
-                                                .fillMaxWidth(fractions[i])
-                                                .height(6.dp)
-                                                .background(t.fg.copy(alpha = if (i == 0) 1f else 0.3f), RoundedCornerShape(4.dp)),
-                                        )
-                                        Spacer(Modifier.height(6.dp))
-                                    }
-                                }
+                                AppearancePreview(mode)
                             }
                             Spacer(Modifier.height(8.dp))
                             FilterChip(
-                                selected = theme == t,
-                                onClick = { theme = t },
-                                label = { Text(t.label, fontSize = 11.sp) },
+                                selected = appearance == mode,
+                                onClick = { selectAppearance(mode) },
+                                label = { Text(mode.label, fontSize = 11.sp) },
                             )
                         }
                     }
                 }
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    "Automático segue o modo escuro do sistema.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
 
@@ -139,11 +145,6 @@ fun SettingsScreen(nav: NavController) {
         ) {
             Column(Modifier.padding(16.dp)) {
                 SettingRow("Versículos em linhas", "Um versículo por linha", versesPerLine) { versesPerLine = it }
-                HorizontalDivider(
-                    Modifier.padding(vertical = 12.dp),
-                    color = MaterialTheme.colorScheme.outline,
-                )
-                SettingRow("Modo noite automático", "Após 20h, troca para escuro", autoNight) { autoNight = it }
             }
         }
 
@@ -180,7 +181,72 @@ fun SettingsScreen(nav: NavController) {
     }
 }
 
+private val InkDark = Color(0xFF1B1B33)
+private val InkLight = Color(0xFFF0EDF7)
 private val fractions = listOf(0.7f, 0.55f, 0.6f)
+
+/** Miniatura do tema: "linhas de texto" sobre a cor de fundo. */
+@Composable
+private fun AppearancePreview(mode: AppearanceMode) {
+    Column(Modifier.fillMaxWidth().height(56.dp)) {
+        when (mode) {
+            AppearanceMode.AUTO -> {
+                // Metade clara + metade escura: segue o sistema.
+                PreviewHalf(Paper, InkDark)
+                PreviewHalf(NightInk, InkLight)
+            }
+            AppearanceMode.LIGHT -> PreviewBody(Paper, InkDark)
+            AppearanceMode.SEPIA -> PreviewBody(Sepia, SepiaInk)
+            AppearanceMode.DARK -> PreviewBody(NightInk, InkLight)
+        }
+    }
+}
+
+@Composable
+private fun PreviewBody(bg: Color, fg: Color) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(bg)
+            .padding(10.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        fractions.forEachIndexed { i, f ->
+            Box(
+                Modifier
+                    .fillMaxWidth(f)
+                    .height(6.dp)
+                    .background(fg.copy(alpha = if (i == 0) 1f else 0.3f), RoundedCornerShape(4.dp)),
+            )
+        }
+    }
+}
+
+@Composable
+private fun PreviewHalf(bg: Color, fg: Color) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f)
+            .background(bg)
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Box(
+            Modifier
+                .fillMaxWidth(0.7f)
+                .height(5.dp)
+                .background(fg, RoundedCornerShape(3.dp)),
+        )
+        Box(
+            Modifier
+                .fillMaxWidth(0.5f)
+                .height(5.dp)
+                .background(fg.copy(alpha = 0.3f), RoundedCornerShape(3.dp)),
+        )
+    }
+}
 
 @Composable
 private fun SettingRow(title: String, subtitle: String, checked: Boolean, onChange: (Boolean) -> Unit) {

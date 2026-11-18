@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.palavraviva.app.data.prefs.AppearanceMode
 
 private val DarkScheme = darkColorScheme(
     primary = Gold,
@@ -38,6 +39,19 @@ private val LightScheme = lightColorScheme(
     outline = LineLight,
 )
 
+private val SepiaScheme = lightColorScheme(
+    primary = Indigo,
+    onPrimary = Color.White,
+    secondary = GoldTextDark,
+    background = Sepia,
+    onBackground = SepiaInk,
+    surface = Paper,
+    onSurface = SepiaInk,
+    surfaceVariant = Paper,
+    onSurfaceVariant = Muted,
+    outline = LineLight,
+)
+
 // Typography — serifada para a Escritura, sans para a interface
 val AppTypography = Typography(
     headlineLarge = TextStyle(fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, fontSize = 28.sp),
@@ -49,9 +63,20 @@ val AppTypography = Typography(
 )
 
 @Composable
-fun PalavraVivaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun PalavraVivaTheme(
+    appearance: AppearanceMode = AppearanceMode.AUTO,
+    content: @Composable () -> Unit,
+) {
+    // AUTOMÁTICO segue o modo escuro do sistema; os demais fixam o tema.
+    val systemDark = isSystemInDarkTheme()
+    val colorScheme = when (appearance) {
+        AppearanceMode.AUTO -> if (systemDark) DarkScheme else LightScheme
+        AppearanceMode.LIGHT -> LightScheme
+        AppearanceMode.SEPIA -> SepiaScheme
+        AppearanceMode.DARK -> DarkScheme
+    }
     MaterialTheme(
-        colorScheme = if (darkTheme) DarkScheme else LightScheme,
+        colorScheme = colorScheme,
         typography = AppTypography,
         content = content,
     )
