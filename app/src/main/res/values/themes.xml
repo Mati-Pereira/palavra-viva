@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.PalavraViva" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#12122A</item>
+        <item name="android:windowBackground">#12122A</item>
+    </style>
+</resources>

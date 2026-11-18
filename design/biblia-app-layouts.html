@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Palavra Viva — Layouts de Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B1B33; --paper:#FAF7F0; --card:#FFFFFF; --line:#E8E2D6;
+  --pri:#1E1E4B; --pri2:#34347A; --gold:#C9A227; --gold2:#E3C565;
+  --green:#2E7D5B; --muted:#8A8578;
+  --dark-bg:#12122A; --dark-card:#1D1D42; --dark-ink:#F0EDF7; --dark-muted:#9A97B8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0E0E20;font-family:'Inter',sans-serif;padding:48px 24px 64px;color:#EDEBF5}
+h1.title{font-size:28px;font-weight:800;letter-spacing:-.5px;text-align:center;margin-bottom:8px}
+h1.title span{color:var(--gold2)}
+p.sub{text-align:center;color:#8E8BA8;font-size:14px;margin-bottom:44px}
+.board{display:grid;grid-template-columns:repeat(auto-fit,340px);gap:36px;max-width:1180px;margin:0 auto;justify-content:center}
+.screen-wrap{display:flex;flex-direction:column;gap:10px;align-items:center}
+.label{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#7E7BA0}
+
+/* ===== frame ===== */
+.phone{width:340px;height:720px;border-radius:34px;overflow:hidden;position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 8px #23233F,0 0 0 9px #3A3A5E;display:flex;flex-direction:column}
+.statusbar{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:11px;font-weight:600;flex-shrink:0}
+.cam{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#000;opacity:.6;z-index:5}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* themes */
+.light{background:var(--paper);color:var(--ink)}
+.sepia{background:#F3E9D7;color:#4A3B28}
+.dark{background:var(--dark-bg);color:var(--dark-ink)}
+
+/* nav */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 6px}
+.appname{font-weight:800;font-size:17px;letter-spacing:-.3px}
+.appname i{color:var(--gold);font-style:normal}
+.icon{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid transparent;cursor:default}
+.light .icon,.sepia .icon{border-color:var(--line);background:var(--card)}
+.dark .icon{border-color:#2E2E5C;background:var(--dark-card)}
+.icon svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bottomnav{height:62px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid var(--line);flex-shrink:0}
+.dark .bottomnav{border-color:#262650}
+.navitem{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:600;color:inherit;opacity:.45}
+.navitem.active{opacity:1}
+.navitem.active{color:var(--gold)}
+.navitem svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* components */
+.card{border-radius:18px;padding:16px;margin:0 16px 12px}
+.light .card,.sepia .card{background:var(--card);border:1px solid var(--line)}
+.dark .card{background:var(--dark-card);border:1px solid #2A2A55}
+.card-title{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.5;margin-bottom:10px}
+.btn{border:none;border-radius:999px;padding:10px 18px;font-family:inherit;font-size:13px;font-weight:700;cursor:default}
+.btn.primary{background:var(--pri);color:#fff}
+.dark .btn.primary{background:var(--gold);color:#14142B}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:inherit}
+.dark .btn.ghost{border-color:#3A3A6E}
+.btn.gold{background:linear-gradient(120deg,var(--gold),var(--gold2));color:#14142B}
+.progress{height:6px;border-radius:99px;background:rgba(128,120,100,.25);overflow:hidden}
+.progress>div{height:100%;border-radius:99px;background:var(--gold)}
+.ring{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:7;stroke-linecap:round}
+
+/* ===== screen 1: home ===== */
+.greet{padding:6px 20px 14px}
+.greet h2{font-size:22px;font-weight:800;letter-spacing:-.4px}
+.greet p{font-size:12.5px;opacity:.6;margin-top:2px}
+.cont-card{background:linear-gradient(135deg,var(--pri),#3D3D8F)!important;color:#fff;position:relative;overflow:hidden}
+.cont-card .ref{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);margin-bottom:6px}
+.cont-card h3{font-size:20px;font-weight:800;margin-bottom:10px}
+.cont-card .progress{background:rgba(255,255,255,.2)}
+.cont-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.cont-card .row small{font-size:11.5px;opacity:.75}
+.ornament{position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(227,197,101,.25),transparent 70%)}
+.verse-card{text-align:center;padding:22px 20px}
+.verse-card .vr{font-family:'Crimson Pro',serif;font-style:italic;font-size:16.5px;line-height:1.55}
+.verse-card .vf{margin-top:10px;font-size:11.5px;font-weight:700;letter-spacing:1px;color:var(--gold)}
+
+/* ===== screen 2: leitura ===== */
+.read-head{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.read-head .cr{font-weight:800;font-size:16px}
+.passage{flex:1;overflow:hidden;padding:4px 22px;font-family:'Crimson Pro',serif;font-size:15.5px;line-height:1.85}
+.passage .n{color:var(--gold);font-weight:600;font-size:11px;vertical-align:super;margin-right:3px;font-family:'Inter',sans-serif}
+.passage .hl{background:rgba(201,162,39,.28);border-radius:4px;padding:1px 3px;box-shadow:0 0 0 1px rgba(201,162,39,.35) inset}
+.reader-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 14px;border-top:1px solid var(--line);flex-shrink:0}
+.dark .reader-bar{border-color:#262650}
+.chbtn{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:999px;background:rgba(128,120,100,.08)}
+.dark .chbtn{background:var(--dark-card)}
+.chbtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.toolbtn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(128,120,100,.08)}
+.dark .toolbtn{background:var(--dark-card)}
+.toolbtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== screen 3: planos ===== */
+.pl-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;margin:0 16px 10px}
+.light .pl-item,.sepia .pl-item{background:var(--card);border:1px solid var(--line)}
+.dark .pl-item{background:var(--dark-card);border:1px solid #2A2A55}
+.pl-item .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pl-item h4{font-size:14.5px;font-weight:700}
+.pl-item p{font-size:11.5px;opacity:.6;margin-top:2px}
+.chip{margin-left:auto;font-size:11px;font-weight:700;padding:7px 13px;border-radius:999px;background:rgba(201,162,39,.16);color:#8A6D14;white-space:nowrap}
+.dark .chip{color:var(--gold2);background:rgba(201,162,39,.14)}
+.chip.outline{background:transparent;border:1.5px solid var(--line);color:inherit;opacity:.7}
+.dark .chip.outline{border-color:#3A3A6E}
+
+/* ===== screen 4: detalhe plano ===== */
+.plan-hero{padding:8px 20px 14px;display:flex;gap:16px;align-items:center}
+.day-row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:14px;margin:0 16px 8px;font-size:13.5px;font-weight:600}
+.light .day-row{background:var(--card);border:1px solid var(--line)}
+.dark .day-row{background:var(--dark-card);border:1px solid #2A2A55}
+.day-row.done{opacity:.5;text-decoration:line-through}
+.tick{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid rgba(128,120,100,.4)}
+.tick svg{width:12px;height:12px;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.tick.on{background:var(--green);border-color:var(--green)}
+.tick.today{border-color:var(--gold);background:rgba(201,162,39,.18)}
+.day-row .bk{margin-left:auto;font-size:11px;opacity:.55;font-weight:600}
+
+/* ===== screen 5: progresso ===== */
+.streak{display:flex;gap:12px;margin:0 16px 12px}
+.streak .st{flex:1;border-radius:16px;padding:14px;text-align:center}
+.light .st{background:var(--card);border:1px solid var(--line)}
+.dark .st{background:var(--dark-card);border:1px solid #2A2A55}
+.st b{display:block;font-size:22px;font-weight:800}
+.st span{font-size:10.5px;font-weight:600;opacity:.55;letter-spacing:.5px;text-transform:uppercase}
+.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;padding:4px 0 2px}
+.heat i{display:block;aspect-ratio:1;border-radius:3px;background:rgba(128,120,100,.15)}
+.heat i.h1{background:rgba(201,162,39,.3)}.heat i.h2{background:rgba(201,162,39,.55)}.heat i.h3{background:var(--gold)}
+.bars{display:flex;align-items:flex-end;gap:7px;height:90px;padding-top:6px}
+.bars i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--pri2),var(--pri))}
+.dark .bars i{background:linear-gradient(180deg,var(--gold2),var(--gold))}
+
+/* ===== screen 6: tema ===== */
+.theme-row{display:flex;gap:10px;margin:0 16px 14px}
+.th{flex:1;border-radius:16px;padding:12px;text-align:center;border:2px solid transparent}
+.th .prev{height:52px;border-radius:10px;margin-bottom:8px}
+.th span{font-size:11px;font-weight:700}
+.th.sel{border-color:var(--gold)}
+.fslider{display:flex;align-items:center;gap:12px}
+.fslider .track{flex:1;height:5px;border-radius:99px;background:rgba(128,120,100,.25);position:relative}
+.fslider .track i{position:absolute;left:55%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:var(--gold);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.switch{width:42px;height:24px;border-radius:99px;background:rgba(128,120,100,.3);position:relative;flex-shrink:0}
+.switch i{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff}
+.switch.on{background:var(--green)}
+.switch.on i{left:auto;right:3px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+</style>
+</head>
+<body>
+<h1 class="title">📖 Palavra <span>Viva</span> — layouts das telas</h1>
+<p class="sub">Design Material 3 · 6 telas principais · claro / sépia / escuro</p>
+<div class="board">
+
+<!-- ============ 1. INÍCIO ============ -->
+<div class="screen-wrap">
+  <div class="label">01 · Início</div>
+  <div class="phone dark">
+    <div class="cam"></div>
+    <div class="statusbar dark"><span>21:47</span><span>▮▮▮ ▲ ▰</span></div>
+    <div class="content dark">
+      <div class="topbar"><div class="appname">Palavra <i>Viva</i></div><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="greet"><h2>Bom dia, Matheus ☀️</h2><p>27 dias de sequência — continue assim!</p></div>
+      <div class="card cont-card">
+        <div class="ornament"></div>
+        <div class="ref">Continuar leitura</div>
+        <h3>João 3</h3>
+        <div class="progress"><div style="width:62%"></div></div>
+        <div class="row"><small>Você parou no v. 16</small><button class="btn gold">Continuar →</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Plano atual</div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <svg class="ring" width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="21" stroke="rgba(255,255,255,.12)"/><circle cx="26" cy="26" r="21" stroke="#C9A227" stroke-dasharray="132" stroke-dashoffset="80"/></svg>
+          <div><b style="font-size:15px">Plano Anual</b><p style="font-size:11.5px;opacity:.6;margin-top:3px">Dia 142 de 365 · 39% concluído</p></div>
+        </div>
+      </div>
+      <div class="card verse-card">
+        <p class="vr">"Lâmpada para os meus pés é a tua palavra, e luz para o meu caminho."</p>
+        <p class="vf">— SALMOS 119:105</p>
+      </div>
+      <div style="flex:1"></div>
+      <div class="bottomnav">
+        <div class="navitem active"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Início</div>
+        <div class="navitem"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 016.5 22H20V2H6.5A2.5 2.5 0 004 4.5z"/></svg>Bíblia</div>
+        <div class="navitem"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Planos</div>
+        <div class="navitem"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Perfil</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 2. LEITURA ============ -->
+<div class="screen-wrap">
+  <div class="label">02 · Tela de leitura (sépia)</div>
+  <div class="phone sepia">
+    <div class="cam"></div>
+    <div class="statusbar sepia"><span>21:47</span><span>▮▮▮ ▲ ▰</span></div>
+    <div class="content sepia">
+      <div class="read-head">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+        <div class="cr">João 3 <small style="opacity:.5;font-weight:600">· ARA</small></div>
+        <div style="display:flex;gap:8px">
+          <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 01-.1 1.2l2 1.6-2 3.4-2.4-1a7 7 0 01-2 1.2L14 21h-4l-.5-2.6a7 7 0 01-2-1.2l-2.4 1-2-3.4 2-1.6A7 7 0 015 12"/></svg></div>
+        </div>
+      </div>
+      <div class="passage">
+        <p><span class="n">14</span>E como Moisés levantou a serpente no deserto, assim importa que o Filho do homem seja levantado;</p>
+        <p><span class="n">15</span>para que todo o que nele crê tenha a vida eterna.</p>
+        <p style="margin-top:6px"><span class="n">16</span><span class="hl">Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna.</span></p>
+        <p><span class="n">17</span>Porque Deus enviou o seu Filho ao mundo não para condenar o mundo, mas para que o mundo seja salvo por ele.</p>
+        <p><span class="n">18</span>Quem crê nele não é condenado; mas quem não crê já está condenado…</p>
+      </div>
+      <div class="reader-bar">
+        <div class="chbtn"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>João 2</div>
+        <div class="toolbtn"><svg viewBox="0 0 24 24"><path d="M12 21C7 17 3 13.5 3 9.5A4.5 4.5 0 0112 6a4.5 4.5 0 019 3.5c0 4-4 7.5-9 11.5z"/></svg></div>
+        <div class="chbtn">João 4<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 3. PLANOS ============ -->
+<div class="screen-wrap">
+  <div class="label">03 · Planos de leitura</div>
+  <div class="phone light">
+    <div class="cam"></div>
+    <div class="statusbar light"><span>21:47</span><span>▮▮▮ ▲ ▰</span></div>
+    <div class="content light">
+      <div class="topbar"><div class="appname">Planos de leitura</div><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <div class="card cont-card" style="margin-top:8px">
+        <div class="ornament"></div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <svg class="ring" width="56" height="56" viewBox="0 0 56 56" style="transform:rotate(-90deg)"><circle cx="28" cy="28" r="22" stroke="rgba(255,255,255,.2)"/><circle cx="28" cy="28" r="22" stroke="#E3C565" stroke-dasharray="138" stroke-dashoffset="84"/></svg>
+          <div><h3 style="font-size:17px;font-weight:800;margin-bottom:4px">Plano Anual</h3><p style="font-size:11.5px;opacity:.75">Dia 142 · 223 dias restantes</p></div>
+        </div>
+      </div>
+      <div class="pl-item"><div class="ic" style="background:#EFE7F9">🔥</div><div><h4>30 dias de Fé</h4><p>Hebreus · Tiago · meditações curtas</p></div><div class="chip">Iniciar</div></div>
+      <div class="pl-item"><div class="ic" style="background:#E8F3EE">🎼</div><div><h4>Salmos em 15 dias</h4><p>Um salmo por dia, com devocional</p></div><div class="chip">Iniciar</div></div>
+      <div class="pl-item"><div class="ic" style="background:#FDEEE3">✝️</div><div><h4>Vida de Cristo</h4><p>90 dias pelos 4 Evangelhos</p></div><div class="chip outline">Em breve</div></div>
+      <div class="pl-item"><div class="ic" style="background:#E7EEFB">🌅</div><div><h4>Novos começos</h4><p>Gênesis · 21 dias</p></div><div class="chip">Iniciar</div></div>
+      <div style="flex:1"></div>
+      <div class="bottomnav" style="background:#fff">
+        <div class="navitem" style="color:#1B1B33"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Início</div>
+        <div class="navitem" style="color:#1B1B33"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 016.5 22H20V2H6.5A2.5 2.5 0 004 4.5z"/></svg>Bíblia</div>
+        <div class="navitem active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Planos</div>
+        <div class="navitem" style="color:#1B1B33"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Perfil</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 4. DETALHE DO PLANO ============ -->
+<div class="screen-wrap">
+  <div class="label">04 · Plano · dia atual</div>
+  <div class="phone light">
+    <div class="cam"></div>
+    <div class="statusbar light"><span>21:47</span><span>▮▮▮ ▲ ▰</span></div>
+    <div class="content light">
+      <div class="topbar"><div class="icon"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div><div class="appname">Plano Anual</div><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></div></div>
+      <div class="plan-hero">
+        <svg class="ring" width="58" height="58" viewBox="0 0 58 58"><circle cx="29" cy="29" r="23" stroke="#E8E2D6"/><circle cx="29" cy="29" r="23" stroke="#C9A227" stroke-dasharray="145" stroke-dashoffset="88"/></svg>
+        <div><b style="font-size:19px;font-weight:800">Dia 142</b><p style="font-size:12px;opacity:.6;margin-top:3px">Terça, 17 de novembro</p><span class="chip" style="margin-left:0;display:inline-block;margin-top:8px">39% concluído</span></div>
+      </div>
+      <div class="card" style="padding:14px 16px">
+        <div class="card-title" style="margin-bottom:12px">Leituras de hoje</div>
+        <div class="day-row" style="margin:0 0 8px"><div class="tick on"><svg viewBox="0 0 24 24"><path d="M5 13l4 4 10-11"/></svg></div>Gênesis 44–46<span class="bk">lido ✓</span></div>
+        <div class="day-row" style="margin:0"><div class="tick today"></div>Lucas 19<span class="bk" style="color:#8A6D14">ler agora →</span></div>
+      </div>
+      <div style="display:flex;gap:10px;padding:4px 16px 0">
+        <button class="btn primary" style="flex:1">Marcar dia como lido</button>
+        <button class="btn ghost" style="flex:0 0 auto">Adiar</button>
+      </div>
+      <div class="card" style="margin-top:14px;padding:14px 16px">
+        <div class="card-title">Próximos dias</div>
+        <div class="day-row done" style="margin:0 0 8px"><div class="tick on"><svg viewBox="0 0 24 24"><path d="M5 13l4 4 10-11"/></svg></div>Dia 143 · Gên 47–50 · Sl 22</div>
+        <div class="day-row" style="margin:0"><div class="tick"></div>Dia 144 · Êx 1–3 · Lc 20</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 5. PROGRESSO ============ -->
+<div class="screen-wrap">
+  <div class="label">05 · Progresso</div>
+  <div class="phone dark">
+    <div class="cam"></div>
+    <div class="statusbar dark"><span>21:47</span><span>▮▮▮ ▲ ▰</span></div>
+    <div class="content dark">
+      <div class="topbar"><div class="appname">Meu progresso</div><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 20v-6M10 20V8M16 20v-9M22 20V4"/></svg></div></div>
+      <div class="streak">
+        <div class="st"><b style="color:#E3C565">🔥 27</b><span>dias seguidos</span></div>
+        <div class="st"><b>843</b><span>capítulos</span></div>
+        <div class="st"><b>210</b><span>dias lidos</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Últimas 8 semanas</div>
+        <div class="heat">
+          <i class="h2"></i><i class="h1"></i><i class="h3"></i><i class="h2"></i><i></i><i class="h1"></i><i class="h3"></i><i class="h2"></i><i class="h2"></i><i class="h3"></i><i class="h1"></i><i class="h3"></i><i class="h3"></i><i class="h2"></i>
+          <i class="h1"></i><i class="h3"></i><i class="h2"></i><i class="h1"></i><i class="h3"></i><i class="h2"></i><i class="h3"></i><i class="h3"></i><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h3"></i><i class="h2"></i><i class="h3"></i>
+          <i class="h3"></i><i class="h2"></i><i class="h3"></i><i class="h3"></i><i class="h1"></i><i class="h2"></i><i class="h2"></i><i class="h3"></i><i class="h3"></i><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h2"></i><i class="h3"></i>
+          <i class="h2"></i><i class="h3"></i><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h3"></i><i class="h2"></i><i class="h3"></i><i class="h2"></i><i class="h3"></i><i class="h3"></i><i class="h2"></i><i class="h1"></i><i class="h3"></i>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Capítulos por semana</div>
+        <div class="bars">
+          <i style="height:45%"></i><i style="height:62%"></i><i style="height:38%"></i><i style="height:74%"></i><i style="height:55%"></i><i style="height:88%"></i><i style="height:66%"></i><i style="height:95%"></i>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;opacity:.5;margin-top:8px;font-weight:600"><span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span><span>S6</span><span>S7</span><span>S8</span></div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:24px">🏆</span>
+        <div><b style="font-size:14px">Conquista desbloqueada!</b><p style="font-size:11.5px;opacity:.6;margin-top:2px">25 dias de sequência — "Constância"</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 6. CONFIG LEITURA ============ -->
+<div class="screen-wrap">
+  <div class="label">06 · Aparência & leitura</div>
+  <div class="phone light">
+    <div class="cam"></div>
+    <div class="statusbar light"><span>21:47</span><span>▮▮▮ ▲ ▰</span></div>
+    <div class="content light">
+      <div class="topbar"><div class="icon"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div><div class="appname">Leitura</div><div style="width:36px"></div></div>
+      <div class="card">
+        <div class="card-title">Tema</div>
+        <div class="theme-row">
+          <div class="th sel" style="background:#FAF7F0;color:#1B1B33"><div class="prev" style="background:#fff;border:1px solid #E8E2D6"><div style="height:6px;width:70%;background:#1B1B33;border-radius:4px;margin:8px auto"></div><div style="height:6px;width:55%;background:#D8D2C4;border-radius:4px;margin:0 auto 6px"></div><div style="height:6px;width:60%;background:#D8D2C4;border-radius:4px;margin:0 auto"></div></div><span>Claro</span></div>
+          <div class="th" style="background:#F3E9D7;color:#4A3B28"><div class="prev" style="background:#EFE2CA"><div style="height:6px;width:70%;background:#4A3B28;border-radius:4px;margin:8px auto"></div><div style="height:6px;width:55%;background:#CBB896;border-radius:4px;margin:0 auto 6px"></div><div style="height:6px;width:60%;background:#CBB896;border-radius:4px;margin:0 auto"></div></div><span>Sépia</span></div>
+          <div class="th" style="background:#12122A;color:#F0EDF7"><div class="prev" style="background:#1D1D42"><div style="height:6px;width:70%;background:#F0EDF7;border-radius:4px;margin:8px auto"></div><div style="height:6px;width:55%;background:#4A4A7A;border-radius:4px;margin:0 auto 6px"></div><div style="height:6px;width:60%;background:#4A4A7A;border-radius:4px;margin:0 auto"></div></div><span>Escuro</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tamanho da fonte</div>
+        <div class="fslider"><span style="font-size:11px;font-weight:700">A</span><div class="track"><i></i></div><span style="font-size:19px;font-weight:800">A</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;opacity:.5;margin-top:6px;font-weight:600"><span>Menor</span><span>Padrão</span><span>Maior</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fonte</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn ghost" style="flex:1;background:rgba(201,162,39,.14);border-color:var(--gold);color:#8A6D14">Serifada</button>
+          <button class="btn ghost" style="flex:1">Moderna</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="setrow"><div><b style="font-size:13.5px">Versículos em linhas</b><p style="font-size:11px;opacity:.6;margin-top:2px">Um versículo por linha</p></div><div class="switch on"><i></i></div></div>
+        <div style="height:14px"></div>
+        <div class="setrow"><div><b style="font-size:13.5px">Modo noite automático</b><p style="font-size:11px;opacity:.6;margin-top:2px">Após 20h, troca para escuro</p></div><div class="switch"><i></i></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Versão da Bíblia</div>
+        <div class="setrow"><b style="font-size:13.5px">Almeida Revista e Atualizada</b><span style="font-size:11px;font-weight:700;color:var(--gold)">ARA ▾</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
