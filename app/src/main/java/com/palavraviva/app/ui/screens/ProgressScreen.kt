@@ -7,17 +7,32 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.palavraviva.app.PalavraVivaApp
 import com.palavraviva.app.ui.theme.Gold
 import com.palavraviva.app.ui.theme.GoldLight
-
-private val weekBars = listOf(0.45f, 0.62f, 0.38f, 0.74f, 0.55f, 0.88f, 0.66f, 0.95f)
+import com.palavraviva.app.ui.viewmodels.ProgressViewModel
+import com.palavraviva.app.ui.viewmodels.percentOf
 
 @Composable
 fun ProgressScreen() {
+    val vm: ProgressViewModel = viewModel {
+        ProgressViewModel(PalavraVivaApp.progressRepository, PalavraVivaApp.planRepository)
+    }
+    val state by vm.uiState.collectAsState()
+
+    // Enquanto o estado carrega, mantém a geometria dos gráficos estável
+    val heatmap = state.heatmap.ifEmpty { List(28) { 0.12f } }
+    val weeklyBars = state.weeklyBars.ifEmpty { List(8) { 0.04f } }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -36,13 +51,13 @@ fun ProgressScreen() {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            StatCard("🔥 27", "dias seguidos", Modifier.weight(1f), highlight = true)
-            StatCard("843", "capítulos", Modifier.weight(1f))
-            StatCard("210", "dias lidos", Modifier.weight(1f))
+            StatCard("🔥 ${state.streak}", "dias seguidos", Modifier.weight(1f), highlight = true)
+            StatCard("${state.chaptersRead}", "capítulos", Modifier.weight(1f))
+            StatCard("${state.activeDays}", "dias lidos", Modifier.weight(1f))
         }
         Spacer(Modifier.height(12.dp))
 
-        // Mapa de calor simplificado (últimas 4 semanas)
+        // Mapa de calor (últimas 4 semanas, dias com leitura marcados)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,19 +68,13 @@ fun ProgressScreen() {
                 Text("ÚLTIMAS 4 SEMANAS", style = MaterialTheme.typography.labelSmall)
                 Spacer(Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    repeat(28) { i ->
-                        val intensity = when (i % 4) {
-                            0 -> 0.25f
-                            1 -> 0.45f
-                            2 -> 0.7f
-                            else -> 1f
-                        }
+                    heatmap.forEach { intensity ->
                         Box(
                             Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
                                 .background(
-                                    Gold.copy(alpha = intensity),
+                                    Gold.copy(alpha = intensity.coerceIn(0.12f, 1f)),
                                     RoundedCornerShape(3.dp),
                                 ),
                         )
@@ -75,7 +84,7 @@ fun ProgressScreen() {
         }
         Spacer(Modifier.height(12.dp))
 
-        // Gráfico de barras semanais
+        // Gráfico de barras: capítulos lidos por semana (últimas 8 semanas)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,7 +101,7 @@ fun ProgressScreen() {
                     horizontalArrangement = Arrangement.spacedBy(7.dp),
                     verticalAlignment = Alignment.Bottom,
                 ) {
-                    weekBars.forEach { h ->
+                    weeklyBars.forEach { h ->
                         Box(
                             Modifier
                                 .weight(1f)
@@ -108,7 +117,49 @@ fun ProgressScreen() {
         }
         Spacer(Modifier.height(12.dp))
 
-        // Conquista
+        // Progresso por plano
+        if (state.planProgress.isNotEmpty()) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                shape = RoundedCornerShape(18.dp),
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text("SEUS PLANOS", style = MaterialTheme.typography.labelSmall)
+                    Spacer(Modifier.height(12.dp))
+                    state.planProgress.forEach { p ->
+                        Column(Modifier.padding(vertical = 8.dp)) {
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(p.name, style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    "${p.completedDays}/${p.totalDays} dias · ${percentOf(p.completedDays, p.totalDays)}%",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            LinearProgressIndicator(
+                                progress = { percentOf(p.completedDays, p.totalDays) / 100f },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(6.dp)
+                                    .clip(RoundedCornerShape(99.dp)),
+                                color = Gold,
+                                trackColor = MaterialTheme.colorScheme.outline,
+                            )
+                        }
+                    }
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+        }
+
+        // Conquista por sequência
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -120,11 +171,11 @@ fun ProgressScreen() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Text("🏆", fontSize = 24.sp)
+                Text(state.achievementEmoji, fontSize = 24.sp)
                 Column {
-                    Text("Conquista desbloqueada!", style = MaterialTheme.typography.titleMedium)
+                    Text(state.achievementTitle, style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "25 dias de sequência — \u201cConstância\u201d",
+                        state.achievementSubtitle,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -147,7 +198,7 @@ private fun StatCard(value: String, label: String, modifier: Modifier = Modifier
             Text(
                 value,
                 fontSize = 22.sp,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold,
+                fontWeight = FontWeight.ExtraBold,
                 color = if (highlight) GoldLight else LocalContentColor.current,
             )
             Text(
