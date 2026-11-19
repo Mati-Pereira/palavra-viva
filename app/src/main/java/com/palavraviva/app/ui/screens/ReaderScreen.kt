@@ -5,33 +5,46 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.palavraviva.app.data.local.Verse
+import com.palavraviva.app.ui.Routes
+import com.palavraviva.app.ui.reader.ReaderBottomBar
+import com.palavraviva.app.ui.reader.ReaderViewModel
+import com.palavraviva.app.ui.reader.VerseActionsSheet
+import com.palavraviva.app.ui.reader.VerseRow
+import com.palavraviva.app.ui.reader.highlightColorOf
 
-private data class Verse(val n: Int, val text: String)
-
-private val joao3 = listOf(
-    Verse(14, "E como Moisés levantou a serpente no deserto, assim importa que o Filho do homem seja levantado;"),
-    Verse(15, "para que todo o que nele crê tenha a vida eterna."),
-    Verse(16, "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."),
-    Verse(17, "Porque Deus enviou o seu Filho ao mundo não para condenar o mundo, mas para que o mundo seja salvo por ele."),
-    Verse(18, "Quem crê nele não é condenado; mas quem não crê já está condenado, porquanto não crê no nome do unigênito Filho de Deus."),
-)
-
+/**
+ * Tela de leitura (Tópico 6): capítulo real do banco, destaque, marcadores,
+ * notas e progresso. `book` pode ser um bookId ("gn") ou um nome ("João"),
+ * conforme as rotas existentes.
+ */
 @Composable
 fun ReaderScreen(book: String, chapter: Int, nav: NavController) {
+    val vm: ReaderViewModel = viewModel(factory = ReaderViewModel.factory(book, chapter))
+    val state by vm.uiState.collectAsState()
+    var sheetVerse by remember { mutableStateOf<Verse?>(null) }
+    val scroll = rememberScrollState()
+
+    // Volta ao topo quando o capítulo muda.
+    LaunchedEffect(state.book?.bookId, state.chapter) { scroll.scrollTo(0) }
+
     Column(Modifier.fillMaxSize()) {
-        // Top bar
+        // Barra superior — título com nome real do livro
         Row(
             Modifier
                 .fillMaxWidth()
@@ -41,62 +54,146 @@ fun ReaderScreen(book: String, chapter: Int, nav: NavController) {
             IconButton(onClick = { nav.popBackStack() }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "Voltar")
             }
-            Text("$book $chapter", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-            IconButton(onClick = { nav.navigate(com.palavraviva.app.ui.Routes.SETTINGS) }) {
+            Text(
+                "${state.book?.name ?: book} ${state.chapter}",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.weight(1f),
+            )
+            IconButton(onClick = { nav.navigate(Routes.SETTINGS) }) {
                 Icon(Icons.Default.Settings, "Ajustes de leitura")
             }
         }
 
-        // Passagem
-        Column(
-            Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 22.dp, vertical = 4.dp),
-        ) {
-            joao3.forEach { v ->
-                Row {
-                    Text(
-                        "${v.n}",
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 11.sp,
-                        modifier = Modifier.padding(top = 6.dp, end = 5.dp),
-                    )
-                    Text(
-                        v.text,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = if (v.n == 16) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onBackground,
-                    )
-                }
-                Spacer(Modifier.height(6.dp))
-            }
-            Spacer(Modifier.height(16.dp))
-        }
+        when {
+            // Aguardando a primeira resposta do banco
+            state.resolving -> Box(
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) { CircularProgressIndicator() }
 
-        // Barra inferior de navegação de capítulo
-        HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AssistChip(
-                onClick = { nav.navigate(com.palavraviva.app.ui.Routes.reader(book, (chapter - 1).coerceAtLeast(1))) },
-                label = { Text("Anterior") },
-                leadingIcon = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, null) },
+            // Banco vazio (importação da Bíblia pendente) — fallback elegante
+            !state.isReady -> BibleNotAvailableNotice(
+                modifier = Modifier.weight(1f),
+                onRetry = vm::retry,
             )
-            IconButton(onClick = { }) {
-                Icon(Icons.Default.FavoriteBorder, "Marcar versículo")
+
+            else -> {
+                // Passagem
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(scroll)
+                        .padding(horizontal = 22.dp, vertical = 4.dp),
+                ) {
+                    when {
+                        !state.versesLoaded -> Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 40.dp),
+                            contentAlignment = Alignment.Center,
+                        ) { CircularProgressIndicator() }
+
+                        state.verses.isEmpty() -> EmptyChapterNotice()
+
+                        else -> state.verses.forEach { v ->
+                            VerseRow(
+                                number = v.verse,
+                                text = v.text,
+                                highlightColor = highlightColorOf(state.highlightFor(v.verse)),
+                                isBookmarked = state.isBookmarked(v.verse),
+                                hasNote = state.noteFor(v.verse) != null,
+                                onClick = { sheetVerse = v },
+                                onLongClick = { sheetVerse = v },
+                            )
+                            Spacer(Modifier.height(6.dp))
+                        }
+                    }
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                // Navegação de capítulo + leitura concluída
+                ReaderBottomBar(
+                    chapter = state.chapter,
+                    chapterCount = state.chapterCount,
+                    isRead = state.isChapterRead,
+                    onPrevious = vm::previousChapter,
+                    onNext = vm::nextChapter,
+                    onMarkRead = vm::markChapterAsRead,
+                )
             }
-            AssistChip(
-                onClick = { nav.navigate(com.palavraviva.app.ui.Routes.reader(book, chapter + 1)) },
-                label = { Text("Próximo") },
-                trailingIcon = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null) },
-            )
         }
+    }
+
+    // Ações do versículo selecionado (destaque, marcador, nota)
+    sheetVerse?.let { target ->
+        VerseActionsSheet(
+            verse = target,
+            highlight = state.highlightFor(target.verse),
+            bookmark = state.bookmarks.firstOrNull { it.verse == target.verse },
+            note = state.noteFor(target.verse),
+            onToggleHighlight = { argb -> vm.toggleHighlight(target.verse, argb) },
+            onToggleBookmark = { vm.toggleBookmark(target.verse) },
+            onSaveBookmarkLabel = { vm.saveBookmarkLabel(target.verse, it) },
+            onSaveNote = { vm.saveNote(target.verse, it) },
+            onDeleteNote = { vm.deleteNote(target.verse) },
+            onDismiss = { sheetVerse = null },
+        )
+    }
+}
+
+/** Fallback quando a Bíblia ainda não foi importada (primeiro start). */
+@Composable
+private fun BibleNotAvailableNotice(modifier: Modifier = Modifier, onRetry: () -> Unit) {
+    Column(
+        modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Icon(
+            Icons.Outlined.MenuBook,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(48.dp),
+        )
+        Spacer(Modifier.height(14.dp))
+        Text(
+            "A Bíblia ainda não foi carregada",
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "O texto bíblico é importado automaticamente no primeiro início do aplicativo. " +
+                "Esta tela é atualizada sozinha assim que a importação terminar.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(18.dp))
+        OutlinedButton(onClick = onRetry) { Text("Tentar novamente") }
+    }
+}
+
+/** Capítulo sem versículos registrados (dados incompletos). */
+@Composable
+private fun EmptyChapterNotice(modifier: Modifier = Modifier) {
+    Column(
+        modifier
+            .fillMaxWidth()
+            .padding(top = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text("Nada por aqui.", style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "Este capítulo não possui versículos registrados.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
     }
 }
