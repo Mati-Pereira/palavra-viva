@@ -40,13 +40,13 @@ app/src/main/java/com/palavraviva/app/
 
 ## Roadmap
 
-- [ ] Empacotar texto bíblico (ARA) em formato estruturado (JSON → Room)
-- [ ] Room: entidades `Book`, `Chapter`, `Verse`, `ReadPlan`, `PlanDay`, `ReadProgress`
-- [ ] Persistir progresso real (marcar capítulos/dias)
-- [ ] Streak + notificação diária (WorkManager)
-- [ ] Widget "versículo do dia"
-- [ ] Tela de leitura: destaque, marcadores e notas
-- [ ] Modo noite automático aplicado ao tema global
+- [x] Empacotar texto bíblico em formato estruturado (JSON → Room) — Bíblia Livre (BLIVRE), CC BY 3.0
+- [x] Room: entidades `Book`, `Verse`, `ReadPlan`, `PlanDay` + progresso, destaques e notas
+- [x] Persistir progresso real (marcar capítulos/dias) com streak e mapa de calor
+- [x] Streak + notificação diária (WorkManager)
+- [x] Widget "versículo do dia" (Glance)
+- [x] Tela de leitura: destaque, marcadores e notas
+- [x] Modo noite automático aplicado ao tema global
 
 ## Como rodar
 

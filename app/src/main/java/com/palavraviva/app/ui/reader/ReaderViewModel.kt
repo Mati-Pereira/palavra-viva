@@ -277,7 +277,6 @@ class ReaderViewModel(
             try {
                 var firstEmission = true
                 bibleRepository.books().collect { all ->
-                    resolveAttempts = 0
                     if (firstEmission) {
                         _dbChecked.value = true
                         firstEmission = false
@@ -289,11 +288,18 @@ class ReaderViewModel(
                     if (_book.value == null || !exactMatch) {
                         val exact = findExactBook(all)
                         if (exact != null) {
+                            // Zera aqui (e não a cada emissão): um banco que
+                            // emite e depois falha repetidamente não pode
+                            // reiniciar a resolução indefinidamente.
                             exactMatch = true
+                            resolveAttempts = 0
                             if (_book.value != exact) {
                                 // Restaura o capítulo pedido ANTES de trocar o
                                 // livro — o coletor de _book reajusta os limites.
                                 _chapter.value = requestedChapter
+                                // Zera o total antigo para não exibir o
+                                // capítulo do livro fallback um instante demais.
+                                _chapterCount.value = 0
                                 _book.value = exact
                             }
                         } else if (_book.value == null) {
