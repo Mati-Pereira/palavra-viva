@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
  */
 object NotificationScheduler {
 
-    private const val WORK_NAME = "daily_reminder"
+    const val WORK_NAME = "daily_reminder"
     private const val REMINDER_HOUR = 9
 
     /**
@@ -36,6 +36,11 @@ object NotificationScheduler {
             ExistingPeriodicWorkPolicy.KEEP,
             request,
         )
+    }
+
+    /** Cancela o lembrete diário (usado pelo toggle nos Ajustes). */
+    fun cancel(context: Context) {
+        WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
     }
 
     /**

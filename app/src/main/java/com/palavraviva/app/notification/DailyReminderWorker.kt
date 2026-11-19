@@ -5,6 +5,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.palavraviva.app.PalavraVivaApp
+import com.palavraviva.app.data.prefs.ReminderPrefs
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate
@@ -23,6 +24,12 @@ class DailyReminderWorker(
         // Sem notificações habilitadas não há nada a fazer — sucesso silencioso
         // para não gerar retries inúteis até o próximo ciclo de 24h.
         if (!NotificationManagerCompat.from(applicationContext).areNotificationsEnabled()) {
+            return Result.success()
+        }
+
+        // Toggle desligado nos Ajustes: respeito duplo, além do cancelamento do
+        // trabalho (cobertura para agendamentos que sobreviveram ao cancelamento).
+        if (!ReminderPrefs.enabled(applicationContext).first()) {
             return Result.success()
         }
 

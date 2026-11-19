@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import com.palavraviva.app.data.prefs.AppearanceMode
 import com.palavraviva.app.data.prefs.AppearancePrefs
 import com.palavraviva.app.ui.PalavraVivaApp
@@ -28,8 +29,10 @@ class MainActivity : ComponentActivity() {
         if (savedInstanceState == null) requestNotificationPermissionIfNeeded()
         setContent {
             // Preferência de aparência persistida (Automático por padrão,
-            // seguindo o modo escuro do sistema).
-            val appearance by AppearancePrefs.mode(this)
+            // seguindo o modo escuro do sistema). O flow é criado uma única
+            // vez por composição — remember evita reiniciar a coleta a cada
+            // recomposição.
+            val appearance by remember { AppearancePrefs.mode(this) }
                 .collectAsState(initial = AppearanceMode.AUTO)
             PalavraVivaTheme(appearance) {
                 PalavraVivaApp()

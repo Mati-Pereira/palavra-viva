@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.work.WorkManager
 import com.palavraviva.app.data.prefs.AppearanceMode
 import com.palavraviva.app.data.prefs.AppearancePrefs
 import com.palavraviva.app.data.prefs.ReminderPrefs
@@ -35,7 +34,9 @@ import com.palavraviva.app.ui.theme.NightInk
 import com.palavraviva.app.ui.theme.Paper
 import com.palavraviva.app.ui.theme.Sepia
 import com.palavraviva.app.ui.theme.SepiaInk
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SettingsScreen(nav: NavController) {
@@ -59,7 +60,11 @@ fun SettingsScreen(nav: NavController) {
     ) { }
 
     fun setReminder(enabled: Boolean) {
-        scope.launch { ReminderPrefs.setEnabled(context, enabled) }
+        // NonCancellable: a escrita sobrevive se o usuário sair da tela no
+        // mesmo instante — prefs e WorkManager ficam sempre em sync.
+        scope.launch {
+            withContext(NonCancellable) { ReminderPrefs.setEnabled(context, enabled) }
+        }
         if (enabled) {
             NotificationScheduler.ensureScheduled(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
@@ -69,7 +74,7 @@ fun SettingsScreen(nav: NavController) {
                 notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         } else {
-            WorkManager.getInstance(context).cancelUniqueWork("daily_reminder")
+            NotificationScheduler.cancel(context)
         }
     }
 

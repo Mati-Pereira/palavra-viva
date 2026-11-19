@@ -64,7 +64,10 @@ private val tabs = listOf(
     Tab(Routes.PLANS, "Planos", Icons.Outlined.EventNote, Icons.Filled.EventNote),
     Tab(Routes.PROGRESS, "Perfil", Icons.Outlined.Person, Icons.Filled.Person),
 )
-private const val READER_TAB = "reader/jo/3" // aba Bíblia abre em João 3 (bookId "jo") por padrão
+// Aba Bíblia: rota PRÓPRIA, distinta de Routes.READER, para não colidir com
+// "reader/{book}/{chapter}" — "reader/jo/3" casaria como destino literal e
+// mostraria a barra inferior só nesse caso, e não nos demais livros.
+private const val READER_TAB = "reader-tab"
 
 @Composable
 fun PalavraVivaApp() {

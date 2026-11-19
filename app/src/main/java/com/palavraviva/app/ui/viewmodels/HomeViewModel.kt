@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -103,21 +103,23 @@ class HomeViewModel(
             }
         }
 
-    /** Versículo do dia (determinístico) com fallback estático se o banco estiver vazio. */
-    private val verseFlow: Flow<VerseOfDayUi> = flow {
-        val verse = bible.verseOfTheDay()
-        if (verse == null) {
-            emit(fallbackVerse)
-            return@flow
-        }
-        val bookName = bible.book(verse.bookId)?.name ?: verse.bookId
-        emit(
+    /**
+     * Versículo do dia (determinístico) com fallback estático se o banco estiver
+     * vazio. Reage ao fim da importação inicial: emite de novo quando o primeiro
+     * livro entra no banco (e só então), trocando o fallback pelo versículo real.
+     */
+    private val verseFlow: Flow<VerseOfDayUi> = bible.books()
+        .map { it.isNotEmpty() }
+        .distinctUntilChanged()
+        .map { dbHasBooks ->
+            if (!dbHasBooks) return@map fallbackVerse
+            val verse = bible.verseOfTheDay() ?: return@map fallbackVerse
+            val bookName = bible.book(verse.bookId)?.name ?: verse.bookId
             VerseOfDayUi(
                 text = verse.text,
                 reference = "$bookName ${verse.chapter}:${verse.verse}",
-            ),
-        )
-    }
+            )
+        }
 
     val uiState: StateFlow<HomeUiState> = combine(
         streakFlow,

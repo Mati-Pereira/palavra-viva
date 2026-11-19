@@ -88,6 +88,12 @@ class ReaderViewModel(
     private val _versesLoaded = MutableStateFlow(false)
     private var resolveJob: Job? = null
 
+    /** true quando o livro exato foi encontrado (fallbacks param de ser tentados). */
+    private var exactMatch = false
+
+    /** Capítulo pedido na rota, preservado caso o livro exato chegue depois. */
+    private val requestedChapter = startChapter.coerceAtLeast(1)
+
     /** Chave do capítulo atual (nula até o livro ser resolvido). */
     private val chapterKey: Flow<ChapterKey?> =
         combine(_book, _chapter) { book, chapter ->
@@ -266,8 +272,23 @@ class ReaderViewModel(
                         _dbChecked.value = true
                         firstEmission = false
                     }
-                    if (_book.value == null) {
-                        _book.value = resolveBook(all)
+                    // Continua tentando até achar o livro pedido: durante a
+                    // importação inicial um fallback provisório pode estar em
+                    // exibição (ex.: aba Bíblia aberta antes do fim da semente);
+                    // o livro exato o substitui assim que entra no banco.
+                    if (_book.value == null || !exactMatch) {
+                        val exact = findExactBook(all)
+                        if (exact != null) {
+                            exactMatch = true
+                            if (_book.value != exact) {
+                                // Restaura o capítulo pedido ANTES de trocar o
+                                // livro — o coletor de _book reajusta os limites.
+                                _chapter.value = requestedChapter
+                                _book.value = exact
+                            }
+                        } else if (_book.value == null) {
+                            _book.value = resolveBook(all) // fallback provisório
+                        }
                     }
                 }
             } catch (e: CancellationException) {
@@ -278,16 +299,21 @@ class ReaderViewModel(
         }
     }
 
+    /** Livro que casa o parâmetro recebido exatamente (bookId ou nome normalizado). */
+    private fun findExactBook(all: List<Book>): Book? {
+        val input = normalize(bookInput)
+        return all.firstOrNull { it.bookId == bookInput }
+            ?: all.firstOrNull { normalize(it.name) == input }
+    }
+
     /**
-     * Resolve o parâmetro de navegação (bookId como "gn" ou nome como "João")
-     * contra os livros do banco; comparação sem acentos e sem caixa alta.
+     * Fallback provisório quando o livro pedido ainda não está no banco
+     * (importação inicial em andamento): prefixo do nome ou primeiro livro.
      */
     private fun resolveBook(all: List<Book>): Book? {
         if (all.isEmpty()) return null
         val input = normalize(bookInput)
-        return all.firstOrNull { it.bookId == bookInput }
-            ?: all.firstOrNull { normalize(it.name) == input }
-            ?: all.firstOrNull { normalize(it.name).startsWith(input) }
+        return all.firstOrNull { normalize(it.name).startsWith(input) }
             ?: all.firstOrNull()
     }
 
