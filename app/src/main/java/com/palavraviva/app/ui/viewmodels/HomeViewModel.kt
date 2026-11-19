@@ -20,7 +20,12 @@ import java.time.LocalTime
 
 data class VerseOfDayUi(val text: String, val reference: String)
 
-data class ContinueReadingUi(val bookName: String, val chapter: Int, val progress: Float)
+data class ContinueReadingUi(
+    val bookId: String,
+    val bookName: String,
+    val chapter: Int,
+    val progress: Float,
+)
 
 data class HomePlanCardUi(
     val planId: String,
@@ -138,6 +143,7 @@ class HomeViewModel(
         val book = bible.book(last.bookId)
         val total = bible.chapterCount(last.bookId).coerceAtLeast(1)
         return ContinueReadingUi(
+            bookId = last.bookId,
             bookName = book?.name ?: last.bookId,
             chapter = last.chapter,
             progress = (last.chapter.toFloat() / total).coerceIn(0.02f, 1f),

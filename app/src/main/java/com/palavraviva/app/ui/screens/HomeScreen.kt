@@ -73,7 +73,7 @@ fun HomeScreen(nav: NavController) {
                 .fillMaxWidth()
                 .clickable {
                     nav.navigate(
-                        if (cont != null) Routes.reader(cont.bookName, cont.chapter) else Routes.reader("João", 3),
+                        if (cont != null) Routes.reader(cont.bookId, cont.chapter) else Routes.reader("jo", 3),
                     )
                 },
             shape = RoundedCornerShape(18.dp),

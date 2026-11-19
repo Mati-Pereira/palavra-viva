@@ -143,7 +143,7 @@ private fun PlanDetailContent(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .clickable { nav.navigate(Routes.reader(currentDay.bookName, currentDay.startChapter)) },
+                        .clickable { nav.navigate(Routes.reader(currentDay.bookId, currentDay.startChapter)) },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(Icons.AutoMirrored.Filled.MenuBook, "Ler", tint = MaterialTheme.colorScheme.secondary)
@@ -196,7 +196,7 @@ private fun PlanDetailContent(
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .clickable { nav.navigate(Routes.reader(d.bookName, d.startChapter)) }
+                            .clickable { nav.navigate(Routes.reader(d.bookId, d.startChapter)) }
                             .padding(vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {

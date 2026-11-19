@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Bookmark
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.StickyNote2
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -66,7 +66,7 @@ fun VerseRow(
             )
             if (isBookmarked) {
                 Icon(
-                    Icons.AutoMirrored.Filled.Bookmark,
+                    Icons.Filled.Bookmark,
                     contentDescription = "Versículo marcado",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier

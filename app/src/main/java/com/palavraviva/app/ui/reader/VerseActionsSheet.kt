@@ -18,8 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Bookmark
-import androidx.compose.material.icons.automirrored.outlined.Bookmark as BookmarkOutlined
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -139,8 +139,8 @@ fun VerseActionsSheet(
                     .padding(horizontal = 4.dp, vertical = 10.dp),
             ) {
                 Icon(
-                    if (bookmark != null) Icons.AutoMirrored.Filled.Bookmark
-                    else BookmarkOutlined,
+                    if (bookmark != null) Icons.Filled.Bookmark
+                    else Icons.Outlined.Bookmark,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                 )

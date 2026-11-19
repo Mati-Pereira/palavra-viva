@@ -23,11 +23,10 @@ import com.palavraviva.app.ui.viewmodels.percentOf
 
 /** Emoji por plano (identidade visual dos cards); fallback neutro. */
 private fun emojiFor(planId: String): String = when (planId) {
-    "anual" -> "🗓️"
-    "fe" -> "🔥"
-    "salmos" -> "🎼"
-    "cristo" -> "✝️"
-    "comuns" -> "🌅"
+    // planIds semeados pelo PlanSeeder (data/bible)
+    "salmos-proverbios-31" -> "🎼"
+    "novo-testamento-90" -> "✝️"
+    "evangelhos-30" -> "🕊️"
     else -> "📖"
 }
 

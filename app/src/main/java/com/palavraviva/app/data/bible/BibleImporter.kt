@@ -37,7 +37,7 @@ object BibleImporter {
     private val CANONICAL_ORDER = listOf(
         // Antigo Testamento
         "gn", "ex", "lv", "nm", "dt", "js", "jz", "rt", "1sm", "2sm",
-        "1rs", "2rs", "1cr", "2cr", "ed", "ne", "et", "jb", "sl", "pv",
+        "1rs", "2rs", "1cr", "2cr", "ed", "ne", "et", "job", "sl", "pv",
         "ec", "ct", "is", "jr", "lm", "ez", "dn", "os", "jl", "am",
         "ob", "jn", "mq", "na", "hc", "sf", "ag", "zc", "ml",
         // Novo Testamento

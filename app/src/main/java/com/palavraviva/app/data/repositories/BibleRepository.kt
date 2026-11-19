@@ -35,6 +35,8 @@ class BibleRepository(private val database: AppDatabase) {
         if (total == 0) return null
         val today = LocalDate.now()
         val position = (today.year * 366 + today.dayOfYear) % total
-        return verseDao.verseAtPosition(position)
+        // Versículos vazios por design (ex.: At 28:29) caem no seguinte.
+        return verseDao.verseAtPosition(position)?.takeIf { it.text.isNotBlank() }
+            ?: verseDao.verseAtPosition((position + 1) % total)
     }
 }

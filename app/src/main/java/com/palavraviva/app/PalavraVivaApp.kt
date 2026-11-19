@@ -1,15 +1,20 @@
 package com.palavraviva.app
 
 import android.app.Application
+import androidx.glance.appwidget.updateAll
 import com.palavraviva.app.data.bible.BibleImporter
 import com.palavraviva.app.data.local.AppDatabase
+import com.palavraviva.app.data.prefs.ReminderPrefs
 import com.palavraviva.app.data.repositories.BibleRepository
 import com.palavraviva.app.data.repositories.HighlightRepository
 import com.palavraviva.app.data.repositories.PlanRepository
 import com.palavraviva.app.data.repositories.ProgressRepository
+import com.palavraviva.app.notification.NotificationScheduler
+import com.palavraviva.app.widget.VerseOfDayGlanceWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -32,12 +37,18 @@ class PalavraVivaApp : Application() {
         highlightRepository = HighlightRepository(database)
 
         // Primeiro início: importa assets/bible/*.json e semeia planos.
+        // Ao final, atualiza o widget para trocar o fallback pelo versículo real.
         applicationScope.launch {
             BibleImporter.seed(this@PalavraVivaApp, database)
+            runCatching { VerseOfDayGlanceWidget.updateAll(this@PalavraVivaApp) }
         }
 
-        // Notificação diária (WorkManager) — classe do tópico de notificações.
-        com.palavraviva.app.notification.NotificationScheduler.ensureScheduled(this)
+        // Notificação diária (WorkManager), respeitando o toggle dos Ajustes.
+        applicationScope.launch {
+            if (ReminderPrefs.enabled(this@PalavraVivaApp).first()) {
+                NotificationScheduler.ensureScheduled(this@PalavraVivaApp)
+            }
+        }
     }
 
     companion object {

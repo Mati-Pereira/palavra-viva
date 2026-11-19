@@ -1,5 +1,6 @@
 package com.palavraviva.app.ui
 
+import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
@@ -41,7 +42,12 @@ object Routes {
     const val PROGRESS = "progress"
     const val SETTINGS = "settings"
 
-    fun reader(book: String, chapter: Int) = "reader/$book/$chapter"
+    /**
+     * Rota do leitor. [book] deve ser preferencialmente o bookId ("gn", "1sm");
+     * nomes ("João", "1 Samuel") também funcionam — o ReaderViewModel aceita
+     * ambos. O segmento é codificado para tolerar espaços/acentos/barras.
+     */
+    fun reader(book: String, chapter: Int) = "reader/${Uri.encode(book)}/$chapter"
     fun planDetail(planId: String) = "plan/$planId"
 }
 
@@ -54,11 +60,11 @@ private data class Tab(
 
 private val tabs = listOf(
     Tab(Routes.HOME, "Início", Icons.Outlined.Home, Icons.Filled.Home),
-    Tab(Routes.READER_TAB, "Bíblia", Icons.Outlined.AutoStories, Icons.Filled.AutoStories),
+    Tab(READER_TAB, "Bíblia", Icons.Outlined.AutoStories, Icons.Filled.AutoStories),
     Tab(Routes.PLANS, "Planos", Icons.Outlined.EventNote, Icons.Filled.EventNote),
     Tab(Routes.PROGRESS, "Perfil", Icons.Outlined.Person, Icons.Filled.Person),
 )
-private const val READER_TAB = "reader/João/3" // aba Bíblia abre em João 3 por padrão
+private const val READER_TAB = "reader/jo/3" // aba Bíblia abre em João 3 (bookId "jo") por padrão
 
 @Composable
 fun PalavraVivaApp() {
@@ -102,14 +108,14 @@ fun PalavraVivaApp() {
             modifier = Modifier.padding(padding),
         ) {
             composable(Routes.HOME) { HomeScreen(navController) }
-            composable(Routes.READER_TAB) { ReaderScreen("João", 3, navController) }
-            composable("reader/{book}/{chapter}") { entry ->
-                val book = entry.arguments?.getString("book") ?: "Gênesis"
+            composable(READER_TAB) { ReaderScreen("jo", 3, navController) }
+            composable(Routes.READER) { entry ->
+                val book = entry.arguments?.getString("book") ?: "gn"
                 val chapter = entry.arguments?.getString("chapter")?.toIntOrNull() ?: 1
                 ReaderScreen(book, chapter, navController)
             }
             composable(Routes.PLANS) { PlansScreen(navController) }
-            composable("plan/{planId}") { entry ->
+            composable(Routes.PLAN_DETAIL) { entry ->
                 PlanDetailScreen(entry.arguments?.getString("planId") ?: "anual", navController)
             }
             composable(Routes.PROGRESS) { ProgressScreen() }

@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.palavraviva.app.ui.theme.Green
-import androidx.compose.material.icons.outlined.CheckCircle as CheckCircleOutlined
+import androidx.compose.material.icons.outlined.CheckCircle
 
 /**
  * Barra inferior do leitor: capítulo anterior/próximo (dentro dos limites do
@@ -57,7 +57,7 @@ fun ReaderBottomBar(
                 label = { Text(if (isRead) "Capítulo lido" else "Marcar como lido") },
                 leadingIcon = {
                     Icon(
-                        if (isRead) Icons.Filled.CheckCircle else CheckCircleOutlined,
+                        if (isRead) Icons.Filled.CheckCircle else Icons.Outlined.CheckCircle,
                         contentDescription = null,
                         tint = if (isRead) Green else MaterialTheme.colorScheme.onSurfaceVariant,
                     )

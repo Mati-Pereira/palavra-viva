@@ -1,7 +1,13 @@
 package com.palavraviva.app.ui.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,11 +20,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.work.WorkManager
 import com.palavraviva.app.data.prefs.AppearanceMode
 import com.palavraviva.app.data.prefs.AppearancePrefs
+import com.palavraviva.app.data.prefs.ReminderPrefs
+import com.palavraviva.app.notification.NotificationScheduler
 import com.palavraviva.app.ui.theme.Gold
 import com.palavraviva.app.ui.theme.NightInk
 import com.palavraviva.app.ui.theme.Paper
@@ -38,6 +49,28 @@ fun SettingsScreen(nav: NavController) {
 
     LaunchedEffect(context) {
         AppearancePrefs.mode(context).collect { appearance = it }
+    }
+
+    // Lembrete diário (WorkManager), persistido no DataStore.
+    val reminderFlow = remember(context) { ReminderPrefs.enabled(context) }
+    val reminderEnabled by reminderFlow.collectAsState(initial = true)
+    val notificationPermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { }
+
+    fun setReminder(enabled: Boolean) {
+        scope.launch { ReminderPrefs.setEnabled(context, enabled) }
+        if (enabled) {
+            NotificationScheduler.ensureScheduled(context)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        } else {
+            WorkManager.getInstance(context).cancelUniqueWork("daily_reminder")
+        }
     }
 
     fun selectAppearance(mode: AppearanceMode) {
@@ -145,10 +178,15 @@ fun SettingsScreen(nav: NavController) {
         ) {
             Column(Modifier.padding(16.dp)) {
                 SettingRow("Versículos em linhas", "Um versículo por linha", versesPerLine) { versesPerLine = it }
+                Spacer(Modifier.height(12.dp))
+                SettingRow("Lembrete diário", "Notificação às 9h com sua sequência", reminderEnabled) {
+                    setReminder(it)
+                }
             }
         }
 
-        // Versão da Bíblia
+        // Versão da Bíblia + atribuição obrigatória da licença (CC BY 3.0)
+        val uriHandler = LocalUriHandler.current
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -164,13 +202,27 @@ fun SettingsScreen(nav: NavController) {
                 Column(Modifier.weight(1f)) {
                     Text("Versão da Bíblia", style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "Almeida Revista e Atualizada",
+                        "Bíblia Livre",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        "Texto bíblico: Bíblia Livre (BLIVRE), licença CC BY 3.0",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        "creativecommons.org/licenses/by/3.0/br",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable {
+                            runCatching { uriHandler.openUri("https://creativecommons.org/licenses/by/3.0/br/") }
+                        },
+                    )
                 }
                 Text(
-                    "ARA ▾",
+                    "BLIVRE",
                     color = Gold,
                     fontSize = 12.sp,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
