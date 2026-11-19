@@ -15,10 +15,12 @@ import java.text.Normalizer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -91,6 +93,9 @@ class ReaderViewModel(
     /** true quando o livro exato foi encontrado (fallbacks param de ser tentados). */
     private var exactMatch = false
 
+    /** Contador de retomadas da resolução após exceção (limitado a 5). */
+    private var resolveAttempts = 0
+
     /** Capítulo pedido na rota, preservado caso o livro exato chegue depois. */
     private val requestedChapter = startChapter.coerceAtLeast(1)
 
@@ -147,7 +152,11 @@ class ReaderViewModel(
         startResolving()
         // Total de capítulos do livro, para limitar a navegação.
         viewModelScope.launch {
-            _book.filterNotNull().distinctUntilChanged().collect { book ->
+            // collectLatest: se o livro exato chega enquanto o processamento
+            // do fallback ainda está suspenso em chapterCount, o antigo é
+            // cancelado — ele não pode limitar o capítulo restaurado aos
+            // capítulos do livro de fallback.
+            _book.filterNotNull().distinctUntilChanged().collectLatest { book ->
                 _chapterCount.value = bibleRepository.chapterCount(book.bookId)
                 if (_chapterCount.value > 0) {
                     _chapter.value = _chapter.value.coerceIn(1, _chapterCount.value)
@@ -268,6 +277,7 @@ class ReaderViewModel(
             try {
                 var firstEmission = true
                 bibleRepository.books().collect { all ->
+                    resolveAttempts = 0
                     if (firstEmission) {
                         _dbChecked.value = true
                         firstEmission = false
@@ -295,6 +305,14 @@ class ReaderViewModel(
                 throw e
             } catch (_: Exception) {
                 _dbChecked.value = true // banco inacessível → fallback com retry
+                // Exceção com um fallback provisório na tela: sem isso, o livro
+                // exato jamais seria aplicado. Tenta retomar a resolução (com
+                // limite para não gerar loop infinito num banco quebrado).
+                if (_book.value != null && !exactMatch && resolveAttempts < 5) {
+                    resolveAttempts++
+                    delay(1_000)
+                    startResolving()
+                }
             }
         }
     }

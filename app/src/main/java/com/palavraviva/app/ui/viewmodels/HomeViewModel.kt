@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.time.LocalTime
@@ -105,15 +106,16 @@ class HomeViewModel(
 
     /**
      * Versículo do dia (determinístico) com fallback estático se o banco estiver
-     * vazio. Reage ao fim da importação inicial: emite de novo quando o primeiro
-     * livro entra no banco (e só então), trocando o fallback pelo versículo real.
+     * vazio. Reativo ao AVANÇO da importação inicial: recalcula a cada livro
+     * que entra (no máx. 66 vezes, apenas na primeira importação), de modo que
+     * o valor final é idêntico ao do widget, atualizado ao fim da semente.
      */
     private val verseFlow: Flow<VerseOfDayUi> = bible.books()
-        .map { it.isNotEmpty() }
+        .map { it.size }
         .distinctUntilChanged()
-        .map { dbHasBooks ->
-            if (!dbHasBooks) return@map fallbackVerse
-            val verse = bible.verseOfTheDay() ?: return@map fallbackVerse
+        .mapLatest { count ->
+            if (count == 0) return@mapLatest fallbackVerse
+            val verse = bible.verseOfTheDay() ?: return@mapLatest fallbackVerse
             val bookName = bible.book(verse.bookId)?.name ?: verse.bookId
             VerseOfDayUi(
                 text = verse.text,
