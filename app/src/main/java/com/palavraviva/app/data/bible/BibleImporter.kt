@@ -17,7 +17,7 @@ import org.json.JSONObject
 private val Context.seedStore by preferencesDataStore(name = "bible_seed")
 
 /**
- * Importador do primeiro início: lê TODOS os `assets/bible/*.json` disponíveis
+ * Importador do primeiro início: lê TODOS os arquivos JSON de `assets/bible/` disponíveis
  * e popula [Book]/[Verse] no Room, semeando em seguida os planos de leitura.
  *
  * - A lista de assets é dinâmica: se nenhum arquivo existir ainda, a semente
@@ -62,7 +62,7 @@ object BibleImporter {
         }
     }
 
-    /** Percorre `bible/*.json` dinamicamente; arquivos ausentes/inválidos são ignorados. */
+    /** Percorre os JSONs em `bible/` dinamicamente; arquivos ausentes/inválidos são ignorados. */
     private suspend fun importAssets(context: Context, database: AppDatabase) {
         val files = runCatching { context.assets.list("bible") }
             .getOrNull()
