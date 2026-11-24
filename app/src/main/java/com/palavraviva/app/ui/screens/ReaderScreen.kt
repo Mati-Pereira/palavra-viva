@@ -5,6 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material3.*
@@ -23,10 +24,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.palavraviva.app.data.local.Verse
 import com.palavraviva.app.ui.Routes
+import com.palavraviva.app.ui.reader.ChapterStudySheet
 import com.palavraviva.app.ui.reader.ReaderBottomBar
 import com.palavraviva.app.ui.reader.ReaderViewModel
 import com.palavraviva.app.ui.reader.VerseActionsSheet
 import com.palavraviva.app.ui.reader.VerseRow
+import com.palavraviva.app.ui.reader.VerseStudySheet
 import com.palavraviva.app.ui.reader.highlightColorOf
 
 /**
@@ -38,6 +41,9 @@ import com.palavraviva.app.ui.reader.highlightColorOf
 fun ReaderScreen(book: String, chapter: Int, nav: NavController) {
     val vm: ReaderViewModel = viewModel(factory = ReaderViewModel.factory(book, chapter))
     val state by vm.uiState.collectAsState()
+    val verseStudyState by vm.verseStudyState.collectAsState()
+    val chapterGuideState by vm.chapterGuideState.collectAsState()
+    val hasApiKey by vm.hasApiKey.collectAsState()
     var sheetVerse by remember { mutableStateOf<Verse?>(null) }
     val scroll = rememberScrollState()
 
@@ -60,6 +66,11 @@ fun ReaderScreen(book: String, chapter: Int, nav: NavController) {
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f),
             )
+            if (state.isReady && state.verses.isNotEmpty()) {
+                IconButton(onClick = { vm.openChapterGuide() }) {
+                    Icon(Icons.Filled.AutoAwesome, "Guia do capítulo")
+                }
+            }
             IconButton(onClick = { nav.navigate(Routes.SETTINGS) }) {
                 Icon(Icons.Default.Settings, "Ajustes de leitura")
             }
@@ -127,19 +138,65 @@ fun ReaderScreen(book: String, chapter: Int, nav: NavController) {
         }
     }
 
-    // Ações do versículo selecionado (destaque, marcador, nota)
+    // Ações do versículo selecionado (destaque, marcador, nota, estudo)
     sheetVerse?.let { target ->
         VerseActionsSheet(
             verse = target,
             highlight = state.highlightFor(target.verse),
             bookmark = state.bookmarks.firstOrNull { it.verse == target.verse },
             note = state.noteFor(target.verse),
+            hasCachedStudy = state.hasCachedStudy(target.verse),
+            onOpenStudy = {
+                sheetVerse = null
+                vm.openVerseStudy(target)
+            },
             onToggleHighlight = { argb -> vm.toggleHighlight(target.verse, argb) },
             onToggleBookmark = { vm.toggleBookmark(target.verse) },
             onSaveBookmarkLabel = { vm.saveBookmarkLabel(target.verse, it) },
             onSaveNote = { vm.saveNote(target.verse, it) },
             onDeleteNote = { vm.deleteNote(target.verse) },
             onDismiss = { sheetVerse = null },
+        )
+    }
+
+    // Estudo contextual do versículo (glossário offline + IA + chat)
+    if (verseStudyState.verse != null) {
+        VerseStudySheet(
+            bookName = state.book?.name ?: book,
+            chapter = state.chapter,
+            state = verseStudyState,
+            hasApiKey = hasApiKey,
+            onRefresh = { verseStudyState.verse?.let { vm.openVerseStudy(it, forceRefresh = true) } },
+            onSaveToNote = vm::saveVerseStudyToNote,
+            onOpenReference = { refBookId, refChapter ->
+                vm.closeVerseStudy()
+                nav.navigate(Routes.reader(refBookId, refChapter))
+            },
+            onSendChat = vm::sendVerseChat,
+            onClearChat = vm::clearVerseChat,
+            onOpenSettings = {
+                vm.closeVerseStudy()
+                nav.navigate(Routes.SETTINGS)
+            },
+            onDismiss = vm::closeVerseStudy,
+        )
+    }
+
+    // Guia de contexto do capítulo inteiro + chat
+    if (chapterGuideState.visible) {
+        ChapterStudySheet(
+            bookName = state.book?.name ?: book,
+            chapter = state.chapter,
+            state = chapterGuideState,
+            hasApiKey = hasApiKey,
+            onRefresh = { vm.openChapterGuide(forceRefresh = true) },
+            onSendChat = vm::sendChapterChat,
+            onClearChat = vm::clearChapterChat,
+            onOpenSettings = {
+                vm.closeChapterGuide()
+                nav.navigate(Routes.SETTINGS)
+            },
+            onDismiss = vm::closeChapterGuide,
         )
     }
 }

@@ -1,0 +1,938 @@
+[
+  {
+    "termKey": "publicano",
+    "term": "Publicano",
+    "category": "Sociedade",
+    "originalWord": "telōnēs (grego)",
+    "summary": "Cobrador de impostos contratado pelo sistema romano para arrecadar tributos locais e pedágios.",
+    "historicalContext": "Na Judeia e Galileia do século I, os publicanos compravam o direito de coleta de Roma e lucravam cobrando acima do valor exigido. Por colaborarem com o império ocupante e frequentemente extorquirem o povo, eram desprezados e considerados ritualmente impuros por grupos religiosos.",
+    "aliases": ["publicanos", "cobrador de impostos", "cobradores de impostos"]
+  },
+  {
+    "termKey": "fariseu",
+    "term": "Fariseu",
+    "category": "Grupos",
+    "originalWord": "perushim (hebraico) / pharisaios (grego)",
+    "summary": "Movimento judaico influente dedicado à observância rigorosa da Lei escrita e das tradições orais.",
+    "historicalContext": "Surgidos no período intertestamentário, os fariseus tinham forte presença nas sinagogas e ensinavam a ressurreição dos mortos e a vida após a morte. Diferente dos saduceus, valorizavam a interpretação oral dos escribas para aplicar a Torá ao cotidiano.",
+    "aliases": ["fariseus"]
+  },
+  {
+    "termKey": "saduceu",
+    "term": "Saduceu",
+    "category": "Grupos",
+    "originalWord": "tsaddukim (hebraico) / saddoukaios (grego)",
+    "summary": "Grupo sacerdotal e aristocrático ligado ao Templo de Jerusalém e à elite política judaica.",
+    "historicalContext": "Os saduceus aceitavam apenas os cinco livros de Moisés (Torá) como autoridade máxima e negavam a ressurreição dos mortos, anjos e tradições orais farisaicas. Tinham grande influência no Sinédrio até a destruição do Templo no ano 70 d.C.",
+    "aliases": ["saduceus"]
+  },
+  {
+    "termKey": "escriba",
+    "term": "Escriba",
+    "category": "Grupos",
+    "originalWord": "sofer (hebraico) / grammateus (grego)",
+    "summary": "Copista, intérprete oficial e professor especializado nas Escrituras e na legislação judaica.",
+    "historicalContext": "Originalmente responsáveis por copiar os rolos sagrados, os escribas no século I atuavam como juristas e doutores da Lei, frequentemente alinhados aos fariseus e com assento no Sinédrio.",
+    "aliases": ["escribas", "doutor da lei", "doutores da lei"]
+  },
+  {
+    "termKey": "sinagoga",
+    "term": "Sinagoga",
+    "category": "Lugares e Culto",
+    "originalWord": "synagōgē (grego — assembleia)",
+    "summary": "Casa local de oração, leitura das Escrituras e ensino comunitário judaico fora do Templo.",
+    "historicalContext": "Desenvolvida especialmente após o exílio babilônico e fortalecida na Diáspora, a sinagoga era o centro da vida religiosa e social de vilarejos e cidades, onde não havia sacrifícios de animais, mas leitura da Torá e dos Profetas aos sábados.",
+    "aliases": ["sinagogas"]
+  },
+  {
+    "termKey": "sinedrio",
+    "term": "Sinédrio",
+    "category": "Sociedade",
+    "originalWord": "synedrion (grego — conselho sentado junto)",
+    "summary": "Suprema corte religiosa e civil judaica sediada em Jerusalém no período do Segundo Templo.",
+    "historicalContext": "Composto por 71 membros entre principais sacerdotes, anciãos e escribas e presidido pelo sumo sacerdote, julgava causas religiosas e civis sob supervisão da autoridade romana.",
+    "aliases": ["conselho"]
+  },
+  {
+    "termKey": "centuriao",
+    "term": "Centurião",
+    "category": "Sociedade",
+    "originalWord": "kenturiōn / hekatontarchēs (grego)",
+    "summary": "Oficial de carreira do exército romano que comandava cerca de cem soldados (uma centúria).",
+    "historicalContext": "Os centuriões eram a espinha dorsal disciplinar das legiões e tropas auxiliares romanas. Nas províncias orientais, cuidavam da ordem local, guarnições e execuções.",
+    "aliases": ["centurioes"]
+  },
+  {
+    "termKey": "samaritano",
+    "term": "Samaritano",
+    "category": "Povos",
+    "originalWord": "shomronim (hebraico)",
+    "summary": "Habitante da região central de Samaria, de origem mista israelita e estrangeira, com culto próprio no monte Gerizim.",
+    "historicalContext": "Após a queda do Reino do Norte pela Assíria em 722 a.C., os remanescentes israelitas misturaram-se a povos reassentados. Os samaritanos aceitavam apenas o Pentateuco e mantinham rivalidade histórica e religiosa intensa com os judeus de Jerusalém.",
+    "aliases": ["samaritanos", "samaritana", "samaria"]
+  },
+  {
+    "termKey": "gentio",
+    "term": "Gentio",
+    "category": "Povos",
+    "originalWord": "goyim (hebraico) / ethnē (grego)",
+    "summary": "Termo usado nas Escrituras para designar todas as nações e povos não israelitas.",
+    "historicalContext": "No judaísmo do Segundo Templo, distinguia quem não fazia parte da aliança mosaica. Muitos gentios simpatizantes frequentavam sinagogas como 'tementes a Deus' sem assumir a circuncisão.",
+    "aliases": ["gentios", "gentes", "nações"]
+  },
+  {
+    "termKey": "proselito",
+    "term": "Prosélito",
+    "category": "Grupos",
+    "originalWord": "prosēlytos (grego — recém-chegado)",
+    "summary": "Pessoa de origem gentia que se convertia integralmente à fé judaica.",
+    "historicalContext": "No século I, a conversão completa envolvia instrução na Lei, banho ritual de purificação, oferta (enquanto o Templo existia) e circuncisão para homens.",
+    "aliases": ["proselitos"]
+  },
+  {
+    "termKey": "denario",
+    "term": "Denário",
+    "category": "Medidas e Moedas",
+    "originalWord": "dēnarion (grego) / denarius (latim)",
+    "summary": "Moeda de prata romana equivalente ao salário médio de um dia de trabalho rural.",
+    "historicalContext": "Introduzido na região com o domínio romano, o denário trazia a efígie e inscrição do imperador César, tornando o pagamento de tributos com ele um tema politicamente sensível entre os judeus.",
+    "aliases": ["denarios"]
+  },
+  {
+    "termKey": "dracma",
+    "term": "Dracma",
+    "category": "Medidas e Moedas",
+    "originalWord": "drachmē (grego)",
+    "summary": "Moeda de prata grega de valor muito próximo ao do denário romano (cerca de um dia de salário).",
+    "historicalContext": "Circulava amplamente nas cidades helenizadas do Mediterrâneo oriental e equivalia a quatro gramas de prata aproximadamente.",
+    "aliases": ["dracmas"]
+  },
+  {
+    "termKey": "talento",
+    "term": "Talento",
+    "category": "Medidas e Moedas",
+    "originalWord": "talanton (grego) / kikkar (hebraico)",
+    "summary": "Unidade de peso muito elevada (cerca de 34 kg) usada para grandes quantias em ouro ou prata.",
+    "historicalContext": "Um talento de prata equivalia a cerca de 6.000 denários — aproximadamente vinte anos de salário de um trabalhador comum, representando uma fortuna imensa nas parábolas.",
+    "aliases": ["talentos"]
+  },
+  {
+    "termKey": "siclo",
+    "term": "Siclo",
+    "category": "Medidas e Moedas",
+    "originalWord": "sheqel (hebraico)",
+    "summary": "Unidade básica de peso e moeda usada em Israel para comércio, resgates e imposto anual do Templo.",
+    "historicalContext": "Pesava em média cerca de 11,4 gramas. No período do Novo Testamento, o tributo do Templo era pago em meios-siclos de prata pura de Tiro.",
+    "aliases": ["siclos", "meio siclo"]
+  },
+  {
+    "termKey": "covado",
+    "term": "Côvado",
+    "category": "Medidas e Moedas",
+    "originalWord": "ammah (hebraico) / pēchys (grego)",
+    "summary": "Medida antiga de comprimento baseada na distância do cotovelo até a ponta do dedo médio (cerca de 45 cm).",
+    "historicalContext": "Era a principal unidade arquitetônica do mundo antigo para medir arcas, muralhas, o Tabernáculo e o Templo; havia também um 'côvado real' ligeiramente maior (cerca de 52 cm).",
+    "aliases": ["covados"]
+  },
+  {
+    "termKey": "estadio",
+    "term": "Estádio",
+    "category": "Medidas e Moedas",
+    "originalWord": "stadion (grego)",
+    "summary": "Medida greco-romana de distância equivalente a cerca de 185 metros.",
+    "historicalContext": "Derivada do comprimento padrão da pista de corridas dos estádios gregos, aparecia nos relatos dos Evangelhos para medir distâncias em lagos ou estradas até Jerusalém.",
+    "aliases": ["estadios"]
+  },
+  {
+    "termKey": "odres",
+    "term": "Odres",
+    "category": "Costumes",
+    "originalWord": "nod (hebraico) / askos (grego)",
+    "summary": "Recipientes flexíveis feitos de couro inteiro de cabra ou ovelha usados para guardar vinho, água ou leite.",
+    "historicalContext": "Quando o vinho novo fermenta, libera gases que esticam o couro. Um odre novo ainda possui elasticidade para expandir, enquanto um odre velho e ressecado racha e perde a bebida.",
+    "aliases": ["odre"]
+  },
+  {
+    "termKey": "mana",
+    "term": "Maná",
+    "category": "Antigo Testamento",
+    "originalWord": "man hu (hebraico — 'o que é isto?')",
+    "summary": "Alimento provido diariamente aos israelitas durante a travessia de quarenta anos pelo deserto do Sinai.",
+    "historicalContext": "Descrito como flocos finos semelhantes a semente de coentro e gosto de bolo com mel, aparecia com o orvalho da manhã e devia ser colhido na porção de cada dia, exceto na véspera do sábado.",
+    "aliases": []
+  },
+  {
+    "termKey": "alianca",
+    "term": "Aliança",
+    "category": "Conceitos",
+    "originalWord": "berit (hebraico) / diathēkē (grego)",
+    "summary": "Pacto solene e vinculante estabelecido entre duas partes com promessas, obrigações e sinais ratificadores.",
+    "historicalContext": "No Antigo Oriente Próximo, tratados entre reis e súditos serviam de modelo literário para as alianças bíblicas (como as de Noé, Abraão, Sinai e Davi), seladas por juramentos, refeições ou sangue.",
+    "aliases": ["aliancas", "pacto", "concertos"]
+  },
+  {
+    "termKey": "propiciacao",
+    "term": "Propiciação",
+    "category": "Conceitos",
+    "originalWord": "hilastērion / hilasmos (grego)",
+    "summary": "Meio ou sacrifício de reconciliação que remove a culpa e restaura o favor e a comunhão com Deus.",
+    "historicalContext": "Na tradução grega do Antigo Testamento (Septuaginta), 'hilastērion' traduzia a tampa de ouro da Arca da Aliança (propiciatório), aspergida com sangue no Dia da Expiação.",
+    "aliases": ["propiciatorio"]
+  },
+  {
+    "termKey": "expiacao",
+    "term": "Expiação",
+    "category": "Conceitos",
+    "originalWord": "kippur (hebraico — cobrir / purificar)",
+    "summary": "Ato ritual de cobrir o pecado e purificar o santuário e o povo diante de Deus.",
+    "historicalContext": "No calendário israelita, o Yom Kippur (Dia da Expiação) ocorria uma vez por ano, no décimo dia do sétimo mês, quando o sumo sacerdote entrava no Santo dos Santos.",
+    "aliases": ["expiar", "dia da expiacao"]
+  },
+  {
+    "termKey": "redencao",
+    "term": "Redenção",
+    "category": "Conceitos",
+    "originalWord": "ga'al / padah (hebraico) / apolytrōsis (grego)",
+    "summary": "Libertação obtida mediante o pagamento de um preço ou resgate, seja de escravidão, dívida ou cativeiro.",
+    "historicalContext": "No direito israelita e greco-romano, o 'parente resgatador' (go'el) podia recomprar terras ou familiares empobrecidos; nas cartas paulinas, evoca a alforria de escravos mediante preço.",
+    "aliases": ["redimir", "resgate", "remir"]
+  },
+  {
+    "termKey": "justificacao",
+    "term": "Justificação",
+    "category": "Conceitos",
+    "originalWord": "tsadaq (hebraico) / dikaiosynē (grego)",
+    "summary": "Declaração forense de que alguém está em posição justa ou absolvido diante do tribunal divino.",
+    "historicalContext": "O vocabulário vem do contexto jurídico antigo: justificar não significa apenas tornar moralmente bom por fora, mas pronunciar o veredicto de inocência ou aceitação legal.",
+    "aliases": ["justificado", "justificar"]
+  },
+  {
+    "termKey": "graca",
+    "term": "Graça",
+    "category": "Conceitos",
+    "originalWord": "chen (hebraico) / charis (grego)",
+    "summary": "Favor imerecido, generosidade gratuita concedida a quem não possui direito ou mérito para exigi-lo.",
+    "historicalContext": "No mundo helenístico, 'charis' descrevia tanto a dádiva generosa de um benfeitor poderoso quanto a gratidão correspondente de quem a recebia.",
+    "aliases": ["gracas"]
+  },
+  {
+    "termKey": "metanoia",
+    "term": "Arrependimento (Metanoia)",
+    "category": "Idiomas Originais",
+    "originalWord": "metanoia (grego) / shuv (hebraico)",
+    "summary": "Mudança profunda de mente, propósito e direção de vida, e não apenas remorso passageiro.",
+    "historicalContext": "Enquanto o termo hebraico 'shuv' enfatiza fisicamente 'dar meia-volta e retornar ao caminho', o grego 'metanoia' destaca a transformação de mentalidade e julgamento.",
+    "aliases": ["metanoia", "arrepender", "arrependei", "arrependei-vos", "arrependimento"]
+  },
+  {
+    "termKey": "agape",
+    "term": "Amor Ágape",
+    "category": "Idiomas Originais",
+    "originalWord": "agapē (grego)",
+    "summary": "Amor voluntário, leal e sacrificial voltado ao bem do outro, independente de recompensa.",
+    "historicalContext": "O grego possuía termos distintos para afeição familiar (storgē), amizade (philia) e atração romântica (erōs). Os escritores do Novo Testamento popularizaram 'agapē' para o amor comprometido e generoso.",
+    "aliases": ["agape"]
+  },
+  {
+    "termKey": "shalom",
+    "term": "Paz (Shalom)",
+    "category": "Idiomas Originais",
+    "originalWord": "shalom (hebraico) / eirēnē (grego)",
+    "summary": "Plenitude, integridade, bem-estar comunitário e harmonia, muito além da simples ausência de guerra.",
+    "historicalContext": "Saudação tradicional do antigo Oriente Próximo e de Israel, desejar 'shalom' significava desejar saúde, segurança, justiça e prosperidade integral em todos os relacionamentos.",
+    "aliases": ["paz"]
+  },
+  {
+    "termKey": "amem",
+    "term": "Amém",
+    "category": "Idiomas Originais",
+    "originalWord": "amen (hebraico — firme, verdadeiro, digno de confiança)",
+    "summary": "Expressão litúrgica e afirmativa que significa 'assim seja', 'é verdade' ou 'com certeza'.",
+    "historicalContext": "Vem da mesma raiz hebraica de fidelidade e fé ('emunah'). Nos Evangelhos, Jesus frequentemente a coloca antes de suas declarações ('Em verdade vos digo') para destacar solenidade.",
+    "aliases": ["em verdade"]
+  },
+  {
+    "termKey": "aleluia",
+    "term": "Aleluia",
+    "category": "Idiomas Originais",
+    "originalWord": "halleluyah (hebraico — louvai a Yah/SENHOR)",
+    "summary": "Exclamação de louvor comunitário usada nos Salmos e na liturgia de adoração.",
+    "historicalContext": "Os chamados Salmos do Hallel (Sl 113–118) eram cantados durante grandes festas como a Páscoa, celebrando o livramento do Egito.",
+    "aliases": []
+  },
+  {
+    "termKey": "hosana",
+    "term": "Hosana",
+    "category": "Idiomas Originais",
+    "originalWord": "hosha na (hebraico/aramaico — salva agora, rogamos!)",
+    "summary": "Súplica por libertação que se transformou em aclamação triunfal de louvor.",
+    "historicalContext": "Citada do Salmo 118:25 e ligada à Festa dos Tabernáculos, era gritada pelas multidões ao receber um rei ou libertador esperado em Jerusalém.",
+    "aliases": []
+  },
+  {
+    "termKey": "messias",
+    "term": "Messias / Cristo",
+    "category": "Conceitos",
+    "originalWord": "mashiach (hebraico) / christos (grego)",
+    "summary": "Significa literalmente 'o Ungido', título dado a reis, sacerdotes ou ao libertador prometido de Israel.",
+    "historicalContext": "A unção com azeite consagrava a pessoa para uma missão oficial. No século I, havia fortes expectativas políticas e espirituais pelo Messias descendente de Davi.",
+    "aliases": ["cristo", "ungido"]
+  },
+  {
+    "termKey": "apostolo",
+    "term": "Apóstolo",
+    "category": "Grupos",
+    "originalWord": "apostolos (grego) / shaliach (hebraico)",
+    "summary": "Enviado oficial ou emissário com autoridade delegada para representar quem o enviou.",
+    "historicalContext": "No direito judaico, o 'shaliach' tinha poder jurídico para agir em nome do mandante. No Novo Testamento, designa especialmente os Doze e enviados missionários autorizados.",
+    "aliases": ["apostolos"]
+  },
+  {
+    "termKey": "discipulo",
+    "term": "Discípulo",
+    "category": "Grupos",
+    "originalWord": "talmid (hebraico) / mathētēs (grego)",
+    "summary": "Aprendiz que convive estreitamente com um mestre para assimilar seus ensinamentos e modo de viver.",
+    "historicalContext": "Diferente de uma escola moderna, o discipulado antigo envolvia seguir o rabino pelas estradas, memorizar suas parábolas e imitar sua prática diária.",
+    "aliases": ["discipulos", "discipula"]
+  },
+  {
+    "termKey": "parabola",
+    "term": "Parábola",
+    "category": "Literatura",
+    "originalWord": "mashal (hebraico) / parabolē (grego)",
+    "summary": "Narrativa breve baseada em cenas cotidianas que compara realidades conhecidas com verdades espirituais ou morais.",
+    "historicalContext": "Era um recurso pedagógico muito comum entre mestres judeus da Antiguidade. Muitas vezes escondia o sentido de quem não tinha interesse sincero e provocava reflexão imediata nos ouvintes.",
+    "aliases": ["parabolas"]
+  },
+  {
+    "termKey": "sabado",
+    "term": "Sábado",
+    "category": "Lugares e Culto",
+    "originalWord": "shabbat (hebraico — cessar, descansar)",
+    "summary": "Sétimo dia da semana judaica (do pôr do sol de sexta ao pôr do sol de sábado), dedicado ao descanso e culto.",
+    "historicalContext": "Sinal distintivo da identidade judaica no mundo greco-romano. Os escribas listavam 39 categorias de trabalhos proibidos no sábado, gerando debates sobre curas e necessidade.",
+    "aliases": ["sabados"]
+  },
+  {
+    "termKey": "pascoa",
+    "term": "Páscoa",
+    "category": "Festas",
+    "originalWord": "pesach (hebraico — passar por cima) / pascha (grego)",
+    "summary": "Festa judaica de primavera que celebra a libertação da escravidão no Egito.",
+    "historicalContext": "Celebrada no mês de Nisã (março/abril) com a imolação do cordeiro e o pão sem fermento. Durante a Páscoa, a população de Jerusalém multiplicava-se com peregrinos de todo o império.",
+    "aliases": ["pascual"]
+  },
+  {
+    "termKey": "pentecostes",
+    "term": "Pentecostes",
+    "category": "Festas",
+    "originalWord": "pentēkostē (grego — quinquagésimo dia) / Shavuot (hebraico)",
+    "summary": "Festa das Semanas celebrada cinquenta dias após a Páscoa, ligada à colheita do trigo e à entrega da Lei.",
+    "historicalContext": "Uma das três festas anuais de peregrinação a Jerusalém. Por cair em época de clima favorável para viagens marítimas e terrestres, reunia judeus e prosélitos de diversas línguas.",
+    "aliases": ["semanas"]
+  },
+  {
+    "termKey": "tabernaculos",
+    "term": "Festa dos Tabernáculos",
+    "category": "Festas",
+    "originalWord": "Sukkot (hebraico — tendas/cabanas)",
+    "summary": "Festa de outono em que os israelitas moravam em cabanas de ramos por sete dias.",
+    "historicalContext": "Celebrava o fim das colheitas e lembrava a provisão divina durante os anos de acampamento no deserto, com rituais solenes de água e grandes candelabros no Templo.",
+    "aliases": ["festa das cabanas", "tendas"]
+  },
+  {
+    "termKey": "tabernaculo",
+    "term": "Tabernáculo",
+    "category": "Lugares e Culto",
+    "originalWord": "mishkan (hebraico — morada)",
+    "summary": "Santuário portátil em forma de tenda construído no Sinai como centro do culto israelita antes do Templo.",
+    "historicalContext": "Dividia-se em pátio externo, Lugar Santo e Santo dos Santos, sendo desmontado e transportado pelos levitas durante as marchas pelo deserto.",
+    "aliases": []
+  },
+  {
+    "termKey": "arca",
+    "term": "Arca da Aliança",
+    "category": "Lugares e Culto",
+    "originalWord": "aron ha-berit (hebraico)",
+    "summary": "Cofre de madeira de acácia revestido de ouro que guardava as tábuas da Lei no Santo dos Santos.",
+    "historicalContext": "Considerada o símbolo máximo da presença e do trono visível de Deus no meio de Israel. Desapareceu historicamente antes ou durante a destruição babilônica de 586 a.C.",
+    "aliases": ["arca", "arca do concerto", "arca do testemunho"]
+  },
+  {
+    "termKey": "levita",
+    "term": "Levita",
+    "category": "Grupos",
+    "originalWord": "lewi (hebraico)",
+    "summary": "Membro da tribo de Levi encarregado de auxiliar os sacerdotes no serviço, música e guarda do santuário.",
+    "historicalContext": "Ao contrário das outras tribos, os levitas não receberam território próprio em Canaã, vivendo em cidades designadas e sustentados pelos dízimos do povo.",
+    "aliases": ["levitas"]
+  },
+  {
+    "termKey": "sumo sacerdote",
+    "term": "Sumo Sacerdote",
+    "category": "Grupos",
+    "originalWord": "kohen gadol (hebraico) / archiereus (grego)",
+    "summary": "Principal autoridade sacerdotal de Israel e único autorizado a entrar no Santo dos Santos uma vez ao ano.",
+    "historicalContext": "No século I d.C., deixou de ser vitalício por sucessão hereditária pura e passou a ser nomeado e deposto com frequência por Herodes e pelos governadores romanos.",
+    "aliases": ["sumos sacerdotes", "principal dos sacerdotes"]
+  },
+  {
+    "termKey": "nazireu",
+    "term": "Nazireu",
+    "category": "Costumes",
+    "originalWord": "nazir (hebraico — consagrado, separado)",
+    "summary": "Pessoa que fazia voto voluntário de consagração especial a Deus, por tempo determinado ou toda a vida.",
+    "historicalContext": "Pela lei de Números 6, o nazireu abstinha-se de vinho e derivados da uva, não cortava os cabelos nem se aproximava de cadáveres.",
+    "aliases": ["nazireus", "nazireado"]
+  },
+  {
+    "termKey": "profeta",
+    "term": "Profeta",
+    "category": "Grupos",
+    "originalWord": "navi (hebraico — porta-voz) / prophētēs (grego)",
+    "summary": "Mensageiro autorizado a falar em nome de Deus, denunciando injustiças, chamando ao retorno e anunciando propósitos futuros.",
+    "historicalContext": "Mais do que adivinhos do futuro, os profetas bíblicos atuavam como consciência ética dos reis e do povo, interpretando eventos históricos à luz da aliança.",
+    "aliases": ["profetas", "profecia", "profetizar"]
+  },
+  {
+    "termKey": "diaspora",
+    "term": "Diáspora",
+    "category": "História",
+    "originalWord": "diaspora (grego — dispersão)",
+    "summary": "Comunidades judaicas estabelecidas fora da terra de Israel, espalhadas pelo Império Persa e Greco-Romano.",
+    "historicalContext": "Cidades como Alexandria, Antioquia e Roma tinham populações judaicas expressivas que liam a Bíblia na tradução grega (Septuaginta) e mantinham contato com Jerusalém.",
+    "aliases": ["dispersao", "dispersos"]
+  },
+  {
+    "termKey": "jubileu",
+    "term": "Ano do Jubileu",
+    "category": "Costumes",
+    "originalWord": "yovel (hebraico — chifre de carneiro / trombeta)",
+    "summary": "Ano celebrado a cada cinquenta anos com perdão de dívidas, devolução de terras familiares e alforria de servos.",
+    "historicalContext": "Previsto em Levítico 25 para evitar a concentração perpétua de terras e a pobreza hereditária entre as famílias israelitas.",
+    "aliases": ["jubileu", "ano do jubileu"]
+  },
+  {
+    "termKey": "dizimo",
+    "term": "Dízimo",
+    "category": "Costumes",
+    "originalWord": "ma'aser (hebraico) / dekatē (grego — décima parte)",
+    "summary": "Contribuição de dez por cento da produção agrícola e rebanhos destinada ao sustento dos levitas, festas e necessitados.",
+    "historicalContext": "No antigo Oriente Próximo, reis e templos recolhiam décimas partes. No judaísmo do século I, fariseus estendiam o cuidado do dízimo até a ervas de jardim como hortelã e endro.",
+    "aliases": ["dizimos"]
+  },
+  {
+    "termKey": "primicias",
+    "term": "Primícias",
+    "category": "Costumes",
+    "originalWord": "bikkurim (hebraico) / aparchē (grego)",
+    "summary": "Primeiros frutos da colheita ou primeiras crias do rebanho oferecidos em gratidão a Deus.",
+    "historicalContext": "Representava o reconhecimento de que toda a colheita pertencia a Deus e antecipava a safra inteira que estava por vir.",
+    "aliases": []
+  },
+  {
+    "termKey": "holocausto",
+    "term": "Holocausto",
+    "category": "Lugares e Culto",
+    "originalWord": "olah (hebraico — o que sobe) / holokautōma (grego — queimado por inteiro)",
+    "summary": "Sacrifício em que o animal ofertado era totalmente consumido pelo fogo sobre o altar, sem porção comida pelo ofertante.",
+    "historicalContext": "Simbolizava entrega total e dedicação completa. Era oferecido diariamente de manhã e à tarde no Templo de Jerusalém.",
+    "aliases": ["holocaustos"]
+  },
+  {
+    "termKey": "paes asmos",
+    "term": "Pães Ázimos",
+    "category": "Festas",
+    "originalWord": "matsot (hebraico) / azyma (grego)",
+    "summary": "Pães preparados sem fermento durante sete dias logo após a Páscoa.",
+    "historicalContext": "Recordava a saída apressada do Egito, quando o povo não teve tempo de esperar a massa levedar antes de partir.",
+    "aliases": ["paes asmos", "pao asmo", "sem fermento", "azimos"]
+  },
+  {
+    "termKey": "fermento",
+    "term": "Fermento",
+    "category": "Metáforas",
+    "originalWord": "se'or / chamets (hebraico) / zymē (grego)",
+    "summary": "Pequena porção de massa fermentada usada para levedar todo o pão, usada como metáfora de influência silenciosa.",
+    "historicalContext": "Na linguagem bíblica, ora ilustra influência moral ou doutrinária que corrompe (como nos alertas contra o fermento dos fariseus), ora o crescimento discreto e imparável do Reino.",
+    "aliases": ["levedo", "levedar"]
+  },
+  {
+    "termKey": "jugo",
+    "term": "Jugo",
+    "category": "Metáforas",
+    "originalWord": "ol (hebraico) / zygos (grego)",
+    "summary": "Armação de madeira colocada sobre o pescoço de dois bois para puxarem o arado juntos.",
+    "historicalContext": "Entre os rabinos, 'tomar o jugo' simbolizava submeter-se à disciplina de um mestre ou aos mandamentos da Torá; politicamente, representava sujeição a um império.",
+    "aliases": ["canga"]
+  },
+  {
+    "termKey": "pedra angular",
+    "term": "Pedra Angular",
+    "category": "Metáforas",
+    "originalWord": "akrogōniaios (grego — pedra principal de esquina)",
+    "summary": "Bloco maciço de pedra colocado no canto da fundação que alinha e sustenta duas paredes inteiras.",
+    "historicalContext": "Na alvenaria antiga sem cimento moderno, o corte perfeito da pedra de esquina definia a estabilidade e o prumo de todo o edifício.",
+    "aliases": ["pedra de esquina", "pedra principal"]
+  },
+  {
+    "termKey": "filisteus",
+    "term": "Filisteus",
+    "category": "Povos",
+    "originalWord": "pelishtim (hebraico)",
+    "summary": "Povo de origem egeia estabelecido na planície costeira sul de Canaã (Gaza, Asdode, Ascalom, Ecrom e Gate).",
+    "historicalContext": "Conhecidos pelo domínio inicial da metalurgia do ferro, foram os principais rivais militares de Israel durante o período dos Juízes e dos primeiros reis (Saul e Davi).",
+    "aliases": ["filisteu", "filistia"]
+  },
+  {
+    "termKey": "assiria",
+    "term": "Assíria",
+    "category": "História",
+    "originalWord": "Ashshur (hebraico)",
+    "summary": "Grande império mesopotâmico sediado em Nínive que conquistou o Reino do Norte (Israel) em 722 a.C.",
+    "historicalContext": "Famoso por sua máquina militar e pela política sistemática de deportação de povos conquistados para evitar rebeliões.",
+    "aliases": ["assirios", "assirio", "ninive"]
+  },
+  {
+    "termKey": "babilonia",
+    "term": "Babilônia",
+    "category": "História",
+    "originalWord": "Bavel (hebraico) / Babylōn (grego)",
+    "summary": "Império mesopotâmico que destruiu Jerusalém e o primeiro Templo em 586 a.C., levando Judá ao exílio.",
+    "historicalContext": "Sob Nabucodonosor, foi o centro cultural e político mais poderoso do século VI a.C. No Apocalipse, o nome torna-se símbolo literário de impérios opressores como Roma.",
+    "aliases": ["babilonico", "babilonios", "caldeus"]
+  },
+  {
+    "termKey": "cesar",
+    "term": "César",
+    "category": "História",
+    "originalWord": "kaisar (grego) / caesar (latim)",
+    "summary": "Título imperial romano derivado do sobrenome de Júlio César, equivalente a imperador.",
+    "historicalContext": "No período do Novo Testamento, refere-se sucessivamente a Augusto, Tibério, Calígula, Cláudio e Nero; declarar fidelidade suprema a outro senhor contrastava com o culto imperial romano.",
+    "aliases": ["imperador"]
+  },
+  {
+    "termKey": "herodes",
+    "term": "Herodes",
+    "category": "História",
+    "originalWord": "Hērōdēs (grego)",
+    "summary": "Nome da dinastia idumeia que governou a Judeia e regiões vizinhas como reis clientes sob proteção de Roma.",
+    "historicalContext": "Os textos mencionam diferentes governantes da mesma família: Herodes o Grande (que reformou o Templo), Herodes Antipas (tetrarca da Galileia) e Herodes Agripa.",
+    "aliases": ["herodianos"]
+  },
+  {
+    "termKey": "pilatos",
+    "term": "Pôncio Pilatos",
+    "category": "História",
+    "originalWord": "Pontios Pilatos (grego)",
+    "summary": "Prefeito romano que governou a província da Judeia entre 26 e 36 d.C.",
+    "historicalContext": "Habitualmente residia na cidade costeira de Cesareia Marítima, subindo a Jerusalém com reforços militares durante grandes festas como a Páscoa para conter agitações.",
+    "aliases": ["poncio pilatos"]
+  },
+  {
+    "termKey": "galileia",
+    "term": "Galileia",
+    "category": "Lugares e Culto",
+    "originalWord": "Galil (hebraico — círculo/região)",
+    "summary": "Região fértil ao norte de Israel marcada por vilas de agricultores, pescadores e intenso contato com gentios.",
+    "historicalContext": "Vista pelos eruditos de Jerusalém como província simples e de sotaque característico, era cortada por rotas comerciais internacionais e abrigava o lago conhecido como Mar da Galileia.",
+    "aliases": ["galileu", "galileus"]
+  },
+  {
+    "termKey": "judeia",
+    "term": "Judeia",
+    "category": "Lugares e Culto",
+    "originalWord": "Yehudah (hebraico) / Ioudaia (grego)",
+    "summary": "Região montanhosa ao sul de Israel centrada em Jerusalém e no Templo.",
+    "historicalContext": "Após a deposição de Arquelau em 6 d.C., passou a ser administrada diretamente por prefeitos ou procuradores romanos ligados ao governador da Síria.",
+    "aliases": []
+  },
+  {
+    "termKey": "jordao",
+    "term": "Rio Jordão",
+    "category": "Lugares e Culto",
+    "originalWord": "Yarden (hebraico — o que desce)",
+    "summary": "Principal rio de Israel, que corre do norte através do Mar da Galileia até desaguar no Mar Morto.",
+    "historicalContext": "Serve historicamente como fronteira natural e símbolo de travessia e renovação, desde a entrada com Josué até os batismos de João Batista.",
+    "aliases": ["jordao"]
+  },
+  {
+    "termKey": "oliveiras",
+    "term": "Monte das Oliveiras",
+    "category": "Lugares e Culto",
+    "originalWord": "Har ha-Zeitim (hebraico)",
+    "summary": "Cadeia de colinas situada imediatamente a leste de Jerusalém, separada da cidade pelo vale de Cedrom.",
+    "historicalContext": "Coberto de olivais e próximo de Betânia e do jardim do Getsêmani, oferecia vista panorâmica direta do complexo do Templo.",
+    "aliases": ["getsemani"]
+  },
+  {
+    "termKey": "golgota",
+    "term": "Gólgota",
+    "category": "Lugares e Culto",
+    "originalWord": "gulgoleth (aramaico — lugar da caveira)",
+    "summary": "Local rochoso fora das muralhas de Jerusalém onde os romanos realizavam crucificações.",
+    "historicalContext": "A execução pública romana era realizada perto de estradas movimentadas fora da cidade para servir de advertência aos viajantes e evitar impureza dentro dos muros.",
+    "aliases": ["calvario"]
+  },
+  {
+    "termKey": "reino de deus",
+    "term": "Reino de Deus / dos Céus",
+    "category": "Conceitos",
+    "originalWord": "malkut shamayim (hebraico) / basileia tou theou (grego)",
+    "summary": "Soberania e governo ativo de Deus que se manifesta na história e transforma corações e relações.",
+    "historicalContext": "No Evangelho de Mateus, 'Reino dos Céus' segue o costume judaico reverente de evitar pronunciar o nome divino, equivalendo exatamente a 'Reino de Deus'.",
+    "aliases": ["reino dos ceus"]
+  },
+  {
+    "termKey": "filho do homem",
+    "term": "Filho do Homem",
+    "category": "Conceitos",
+    "originalWord": "bar enash (aramaico) / huios tou anthrōpou (grego)",
+    "summary": "Expressão semítica que significa 'ser humano', mas também evoca a figura celestial glorificada de Daniel 7.",
+    "historicalContext": "Essa dupla camada permitia usar o título tanto com humildade ('alguém como eu') quanto em alusão à autoridade escatológica do livro de Daniel.",
+    "aliases": []
+  },
+  {
+    "termKey": "logos",
+    "term": "Verbo (Logos)",
+    "category": "Idiomas Originais",
+    "originalWord": "logos (grego — palavra, razão, expressão)",
+    "summary": "Termo do prólogo de João para descrever a Palavra criadora eterna de Deus que se manifesta na história.",
+    "historicalContext": "Conecta tanto a sabedoria e palavra criadora do Antigo Testamento ('Davar' em Gênesis e Provérbios 8) quanto um conceito filosófico familiar aos leitores de língua grega.",
+    "aliases": ["logos", "verbo"]
+  },
+  {
+    "termKey": "paracleto",
+    "term": "Consolador (Parácleto)",
+    "category": "Idiomas Originais",
+    "originalWord": "paraklētos (grego — chamado para estar ao lado)",
+    "summary": "Advogado, defensor, conselheiro e auxiliador presente ao lado de alguém.",
+    "historicalContext": "No contexto forense antigo, o parácleto era o amigo de confiança ou defensor que comparecia ao tribunal para falar a favor e orientar o acusado.",
+    "aliases": ["paracleto", "consolador", "advogado"]
+  },
+  {
+    "termKey": "maranata",
+    "term": "Maranata",
+    "category": "Idiomas Originais",
+    "originalWord": "marana tha / maran atha (aramaico)",
+    "summary": "Oração breve das primeiras comunidades cristãs de língua aramaica que significa 'Vem, Senhor!' ou 'O Senhor veio'.",
+    "historicalContext": "Preservada sem tradução até em cartas escritas a igrejas gregas como Corinto, revela quão antigas eram as fórmulas litúrgicas vindas da Judeia.",
+    "aliases": []
+  },
+  {
+    "termKey": "circuncisao",
+    "term": "Circuncisão",
+    "category": "Costumes",
+    "originalWord": "milah (hebraico) / peritomē (grego)",
+    "summary": "Sinal físico feito no oitavo dia de vida dos meninos israelitas como marca da aliança abraâmica.",
+    "historicalContext": "No período greco-romano, tornou-se um dos principais traços de identidade e também o centro do debate em Atos e Gálatas sobre a integração dos gentios.",
+    "aliases": ["circuncidar", "incircuncisao"]
+  },
+  {
+    "termKey": "ancião",
+    "term": "Ancião / Presbítero",
+    "category": "Grupos",
+    "originalWord": "zaqen (hebraico) / presbyteros (grego)",
+    "summary": "Líder respeitado pela maturidade e experiência, responsável por decisões comunitárias, conselho e supervisão.",
+    "historicalContext": "Desde as portas das cidades antigas em Israel até as sinagogas e igrejas primitivas, conselhos de anciãos governavam assuntos locais.",
+    "aliases": ["anciao", "anciaos", "presbitero", "presbiteros"]
+  },
+  {
+    "termKey": "diacono",
+    "term": "Diácono / Servo",
+    "category": "Grupos",
+    "originalWord": "diakonos (grego — servo, ministro de mesa)",
+    "summary": "Pessoa encarregada do serviço prático, assistência social e cuidado com a comunidade.",
+    "historicalContext": "No grego comum, designava quem servia às mesas e atendia necessidades concretas, ganhando dignidade especial nas comunidades cristãs iniciais.",
+    "aliases": ["diacono", "diaconos", "diaconisa"]
+  },
+  {
+    "termKey": "jejum",
+    "term": "Jejum",
+    "category": "Lugares e Culto",
+    "originalWord": "tsom (hebraico) / nēsteia (grego)",
+    "summary": "Abstenção voluntária de alimento acompanhada de oração, arrependimento ou luto diante de Deus.",
+    "historicalContext": "Embora a Lei exigisse apenas no Dia da Expiação, grupos piedosos do século I jejuavam duas vezes por semana (segundas e quintas-feiras).",
+    "aliases": ["jejuar", "jejuando"]
+  },
+  {
+    "termKey": "saco e cinza",
+    "term": "Pano de Saco e Cinza",
+    "category": "Costumes",
+    "originalWord": "saq wa-efer (hebraico)",
+    "summary": "Sinal público de luto profundo, humilhação e arrependimento sincero.",
+    "historicalContext": "O pano de saco era tecido áspero de pelo de cabra usado diretamente sobre a pele, enquanto jogar cinza sobre a cabeça expressava dor extrema.",
+    "aliases": ["pano de saco", "cinzas", "cilicio"]
+  },
+  {
+    "termKey": "talmid",
+    "term": "Rabi / Mestre",
+    "category": "Grupos",
+    "originalWord": "rabbi (hebraico/aramaico — meu grande / meu mestre)",
+    "summary": "Tratamento respeitoso dado a instrutores da Lei e líderes espirituais reconhecidos pelo povo.",
+    "historicalContext": "Antes do ano 70 d.C., 'rabi' era um título honorífico informal dado a mestres itinerantes ou professores respeitados nas sinagogas.",
+    "aliases": ["rabi", "raboni", "mestre"]
+  },
+  {
+    "termKey": "manjedoura",
+    "term": "Manjedoura",
+    "category": "Costumes",
+    "originalWord": "phatnē (grego)",
+    "summary": "Cocho de pedra ou madeira onde se colocava alimento para os animais da casa.",
+    "historicalContext": "As casas simples na Judeia do século I frequentemente tinham um cômodo inferior térreo ou anexo para abrigar os animais à noite, mantendo a família aquecida no piso superior.",
+    "aliases": []
+  },
+  {
+    "termKey": "azeite",
+    "term": "Óleo / Azeite de Unção",
+    "category": "Costumes",
+    "originalWord": "shemen (hebraico) / elaion (grego)",
+    "summary": "Azeite de oliva usado para alimentação, lamparinas, cuidados medicinais e consagração.",
+    "historicalContext": "As oliveiras eram vitais na economia mediterrânea: o azeite simbolizava alegria, cura (derramado em feridas), hospitalidade e separação solene de reis e sacerdotes.",
+    "aliases": ["azeite", "oleo", "uncao", "ungir"]
+  },
+  {
+    "termKey": "vinha",
+    "term": "Vinha e Lagares",
+    "category": "Costumes",
+    "originalWord": "kerem (hebraico) / ampelōn (grego)",
+    "summary": "Plantação de uvas cercada e equipada com tanque escavado na rocha (lagar) para pisar os cachos.",
+    "historicalContext": "Nas colinas da Judeia, vinhas exigiam remoção de pedras, muros contra raposas e torres de vigia; por isso tornaram-se imagem clássica para o cuidado de Deus com Israel.",
+    "aliases": ["vinha", "videira", "lagar", "vinhateiro", "vinhateiros"]
+  },
+  {
+    "termKey": "pastor",
+    "term": "Pastor de Ovelhas",
+    "category": "Sociedade",
+    "originalWord": "ro'eh (hebraico) / poimēn (grego)",
+    "summary": "Condutor de rebanhos que conhecia suas ovelhas pelo nome, guiava-as a pastos e defendia-as de predadores.",
+    "historicalContext": "Diferente de fazendeiros modernos que tocam o rebanho por trás, pastores orientais caminhavam à frente chamando as ovelhas pela voz e dormiam na entrada do aprisco.",
+    "aliases": ["pastores", "aprisco", "rebanho"]
+  },
+  {
+    "termKey": "bem aventurado",
+    "term": "Bem-aventurado",
+    "category": "Idiomas Originais",
+    "originalWord": "ashrei (hebraico) / makarios (grego)",
+    "summary": "Estado profundo de plenitude e favor concedido por Deus, independentemente das circunstâncias externas.",
+    "historicalContext": "Nos Salmos e nos Evangelhos, não expressa apenas alegria passageira ou sorte, mas a condição digna de admiração de quem caminha em harmonia com Deus.",
+    "aliases": ["bem-aventurado", "bem-aventurados", "bem aventurados"]
+  },
+  {
+    "termKey": "evangelho",
+    "term": "Evangelho",
+    "category": "Literatura",
+    "originalWord": "euangelion (grego — boa notícia)",
+    "summary": "Anúncio de boas-novas, usado no Novo Testamento para a mensagem sobre Jesus Cristo e o Reino de Deus.",
+    "historicalContext": "No mundo greco-romano, 'euangelion' era a proclamação oficial de vitórias militares ou da ascensão de um novo imperador; o Novo Testamento ressignificou o termo.",
+    "aliases": ["boas novas", "boa nova", "evangelhos"]
+  },
+  {
+    "termKey": "epistola",
+    "term": "Epístola",
+    "category": "Literatura",
+    "originalWord": "epistolē (grego — carta enviada)",
+    "summary": "Carta pastoral e instrutiva endereçada a comunidades ou líderes específicos para orientar fé e prática.",
+    "historicalContext": "No Império Romano, cartas eram ditadas a um amanuense (secretário), levadas por mensageiros de confiança e lidas em voz alta diante de toda a comunidade reunida.",
+    "aliases": ["epistolas", "carta", "cartas"]
+  },
+  {
+    "termKey": "tora",
+    "term": "Torá / Lei de Moisés",
+    "category": "Antigo Testamento",
+    "originalWord": "torah (hebraico — instrução, ensino) / nomos (grego)",
+    "summary": "Os cinco primeiros livros da Bíblia (Gênesis a Deuteronômio) e a instrução divina dada a Israel.",
+    "historicalContext": "Mais do que um código jurídico rígido, 'torah' significa instrução paternal e caminho de vida para uma nação recém-liberta da escravidão.",
+    "aliases": ["pentateuco", "lei de moises"]
+  },
+  {
+    "termKey": "septuaginta",
+    "term": "Septuaginta (LXX)",
+    "category": "História",
+    "originalWord": "Septuaginta (latim — setenta)",
+    "summary": "Antiga tradução grega do Antigo Testamento produzida em Alexandria a partir do século III a.C.",
+    "historicalContext": "Foi a versão bíblica mais lida pelos judeus da Diáspora e frequentemente citada diretamente pelos autores do Novo Testamento ao escreverem em grego.",
+    "aliases": ["lxx"]
+  },
+  {
+    "termKey": "zelote",
+    "term": "Zelote",
+    "category": "Grupos",
+    "originalWord": "qanna'im (hebraico) / zēlōtēs (grego)",
+    "summary": "Movimento nacionalista judaico do século I que defendia resistência armada contra o domínio romano.",
+    "historicalContext": "Inspirados pelo zelo de Fineias e dos Macabeus, os zelotes recusavam pagar tributos a César e tiveram papel central na revolta judaica de 66–70 d.C.",
+    "aliases": ["zelotes", "cananeu"]
+  },
+  {
+    "termKey": "essenios",
+    "term": "Essênios",
+    "category": "Grupos",
+    "originalWord": "essēnoi (grego)",
+    "summary": "Grupo judaico ascético e comunitário da época do Segundo Templo, geralmente associado a Qumran.",
+    "historicalContext": "Afastavam-se do Templo de Jerusalém por considerarem seu sacerdócio corrompido, viviam em estrita pureza ritual e preservaram os Manuscritos do Mar Morto.",
+    "aliases": ["essenio", "qumran"]
+  },
+  {
+    "termKey": "tetrarca",
+    "term": "Tetrarca",
+    "category": "Sociedade",
+    "originalWord": "tetrarchēs (grego — governante de uma quarta parte)",
+    "summary": "Título dado a governantes regionais menores subordinados a Roma após a divisão do reino de Herodes.",
+    "historicalContext": "Herodes Antipas governava a Galileia e a Pereia como tetrarca, abaixo em prestígio do título completo de rei.",
+    "aliases": ["tetrarcas"]
+  },
+  {
+    "termKey": "batismo",
+    "term": "Batismo",
+    "category": "Lugares e Culto",
+    "originalWord": "baptisma / baptizō (grego — mergulhar, imergir)",
+    "summary": "Rito de imersão em água que expressa purificação, arrependimento ou identificação pública com Cristo.",
+    "historicalContext": "O judaísmo já praticava banhos rituais em tanques de água corrente (mikvah) para purificação e iniciação de prosélitos; João Batista e a igreja primitiva deram novo foco escatológico e comunitário.",
+    "aliases": ["batizar", "batismos", "batizado"]
+  },
+  {
+    "termKey": "santa ceia",
+    "term": "Ceia do Senhor / Partir do Pão",
+    "category": "Lugares e Culto",
+    "originalWord": "kyriakon deipnon (grego)",
+    "summary": "Refeição memorial instituída na noite da Páscoa com pão e cálice de vinho em lembrança da nova aliança.",
+    "historicalContext": "Nas primeiras casas-igrejas, acontecia frequentemente integrada a uma refeição comunitária fraterna chamada 'ágape'.",
+    "aliases": ["ceia", "partir do pao"]
+  },
+  {
+    "termKey": "altar",
+    "term": "Altar",
+    "category": "Lugares e Culto",
+    "originalWord": "mizbeach (hebraico — lugar de sacrifício) / thysiastērion (grego)",
+    "summary": "Estrutura elevada de pedra, terra ou metal coberto de bronze onde se apresentavam sacrifícios e ofertas a Deus.",
+    "historicalContext": "No Tabernáculo e no Templo havia dois altares: o grande altar externo de bronze para animais e o pequeno altar interno de ouro para queima contínua de incenso.",
+    "aliases": ["altares"]
+  },
+  {
+    "termKey": "incenso",
+    "term": "Incenso",
+    "category": "Lugares e Culto",
+    "originalWord": "qetoret (hebraico) / thymiama (grego)",
+    "summary": "Mistura aromática de resinas e especiarias queimada no santuário, símbolo visível das orações que sobem a Deus.",
+    "historicalContext": "A receita sagrada do incenso do Templo era exclusiva para o culto, e apenas um sacerdote sorteado por turno tinha o privilégio de oferecê-lo no Lugar Santo.",
+    "aliases": ["incensario"]
+  },
+  {
+    "termKey": "temor do senhor",
+    "term": "Temor do Senhor",
+    "category": "Conceitos",
+    "originalWord": "yir'at YHWH (hebraico)",
+    "summary": "Reverência profunda, admiração respeitosa e obediência amorosa diante da grandeza e santidade de Deus.",
+    "historicalContext": "Na literatura sapiencial (Provérbios, Jó, Salmos), não significa pavor servil que afasta, mas a sabedoria prática de reconhecer Deus como fonte da vida e da justiça.",
+    "aliases": ["temor de deus"]
+  },
+  {
+    "termKey": "misericordia",
+    "term": "Misericórdia / Amor Leal",
+    "category": "Idiomas Originais",
+    "originalWord": "chesed (hebraico) / eleos (grego)",
+    "summary": "Bondade fiel, compaixão prática e compromisso inabalável dentro de uma aliança.",
+    "historicalContext": "A palavra hebraica 'chesed' une amor, graça e lealdade: descreve alguém poderoso que escolhe ajudar quem está vulnerável não por obrigação fria, mas por fidelidade.",
+    "aliases": ["misericordia", "benignidade", "compassivo"]
+  },
+  {
+    "termKey": "fe",
+    "term": "Fé / Fidelidade",
+    "category": "Idiomas Originais",
+    "originalWord": "emunah (hebraico) / pistis (grego)",
+    "summary": "Confiança firme e lealdade ativa em Deus, unindo convicção interior e entrega prática.",
+    "historicalContext": "Tanto no hebraico quanto no grego, a palavra traz simultaneamente a ideia de 'crer/confiar' e de 'ser fiel/confiável' em um relacionamento.",
+    "aliases": ["fe", "fidelidade"]
+  },
+  {
+    "termKey": "esperanca",
+    "term": "Esperança",
+    "category": "Conceitos",
+    "originalWord": "tiqvah (hebraico — corda firme) / elpis (grego)",
+    "summary": "Expectativa confiante no cumprimento futuro das promessas de Deus, e não mero desejo incerto.",
+    "historicalContext": "Enquanto hoje 'esperança' pode soar como dúvida ('tomara que aconteça'), na linguagem bíblica representa uma âncora segura baseada na fidelidade passada de Deus.",
+    "aliases": []
+  },
+  {
+    "termKey": "satanas",
+    "term": "Satanás / Adversário",
+    "category": "Conceitos",
+    "originalWord": "satan (hebraico — acusador, adversário) / diabolos (grego)",
+    "summary": "Termo que significa opositor ou acusador; no Antigo Testamento e no Novo, designa o inimigo espiritual que tenta e acusa.",
+    "historicalContext": "Nos livros mais antigos (como Jó e Zacarias), aparece com artigo definido ('o acusador', como um promotor em corte), evoluindo para o nome próprio do opositor espiritual no período intertestamentário e no Novo Testamento.",
+    "aliases": ["satanas", "diabo", "adversario", "maligno"]
+  },
+  {
+    "termKey": "anjo",
+    "term": "Anjo",
+    "category": "Conceitos",
+    "originalWord": "mal'ak (hebraico) / angelos (grego — mensageiro)",
+    "summary": "Mensageiro enviado por Deus para transmitir ordens, proteger ou executar juízos.",
+    "historicalContext": "Tanto no hebraico quanto no grego, a mesma palavra pode referir-se a mensageiros humanos comuns ou a seres celestiais, dependendo do contexto da frase.",
+    "aliases": ["anjos"]
+  },
+  {
+    "termKey": "querubim",
+    "term": "Querubim",
+    "category": "Lugares e Culto",
+    "originalWord": "keruvim (hebraico)",
+    "summary": "Seres celestiais alados guardiães da santidade e do trono de Deus.",
+    "historicalContext": "Figuras esculpidas de querubins cobriam com suas asas a tampa da Arca da Aliança e decoravam as cortinas do Tabernáculo e as paredes do Templo de Salomão.",
+    "aliases": ["querubins"]
+  },
+  {
+    "termKey": "idolo",
+    "term": "Ídolo",
+    "category": "Lugares e Culto",
+    "originalWord": "elil / pesel (hebraico — imagem entalhada / coisa vã) / eidōlon (grego)",
+    "summary": "Imagem esculpida usada no culto pagão ou qualquer realidade criada colocada no lugar de Deus.",
+    "historicalContext": "No antigo Oriente Próximo, povos vizinhos criam que a divindade habitava na estátua cuidada no templo; os profetas de Israel ironizavam imagens feitas por mãos humanas que não veem nem falam.",
+    "aliases": ["idolos", "idolatria"]
+  },
+  {
+    "termKey": "voto",
+    "term": "Voto",
+    "category": "Costumes",
+    "originalWord": "neder (hebraico) / euchē (grego)",
+    "summary": "Promessa solene e voluntária feita a Deus de ofertar algo ou cumprir um compromisso após pedido ou livramento.",
+    "historicalContext": "A Torá não obrigava ninguém a fazer votos, mas exigia cumprimento rigoroso uma vez que a promessa fosse pronunciada diante de Deus.",
+    "aliases": ["votos"]
+  },
+  {
+    "termKey": "escravo",
+    "term": "Servo / Escravo",
+    "category": "Sociedade",
+    "originalWord": "eved (hebraico) / doulos (grego)",
+    "summary": "Pessoa sem autonomia civil submetida a um senhor, ou servo devotado a um rei ou a Deus.",
+    "historicalContext": "No mundo romano, escravos compunham grande parcela das cidades e podiam exercer desde trabalho pesado até funções de médicos, tutores e administradores domésticos; na Bíblia, 'servo de Deus' era também título de honra.",
+    "aliases": ["servo", "servos", "escravos", "escravidao"]
+  },
+  {
+    "termKey": "mesa",
+    "term": "Hospitalidade e Mesa",
+    "category": "Costumes",
+    "originalWord": "symposion / synanalēpsis (grego)",
+    "summary": "Sentar-se ou reclinar-se à mesa juntos era sinal público de aceitação, aliança e igualdade social.",
+    "historicalContext": "Em banquetes do século I, convidados reclinavam-se sobre almofadas apoiados no braço esquerdo em torno de mesas baixas em formato de U. Comer com alguém marginalizado causava escândalo imediato.",
+    "aliases": ["reclinar", "banquete", "hospitalidade"]
+  },
+  {
+    "termKey": "emaus",
+    "term": "Emaús",
+    "category": "Lugares e Culto",
+    "originalWord": "Emmaous (grego)",
+    "summary": "Aldeia localizada a cerca de 11 quilômetros (sessenta estádios) de Jerusalém.",
+    "historicalContext": "Cenário da caminhada narrada em Lucas 24, em que dois discípulos conversam sobre as Escrituras e reconhecem Jesus ao partir o pão.",
+    "aliases": []
+  },
+  {
+    "termKey": "apocalipse",
+    "term": "Apocalipse (Revelação)",
+    "category": "Literatura",
+    "originalWord": "apokalypsis (grego — tirar o véu, desvendar)",
+    "summary": "Gênero literário que usa visões simbólicas e linguagem cósmica para revelar o plano soberano de Deus na história.",
+    "historicalContext": "Muito comum entre judeus e cristãos entre 200 a.C. e 150 d.C., a literatura apocalíptica fortalecia comunidades perseguidas usando imagens de Daniel, Ezequiel e Zacarias.",
+    "aliases": ["apocalipse", "revelacao"]
+  }
+]

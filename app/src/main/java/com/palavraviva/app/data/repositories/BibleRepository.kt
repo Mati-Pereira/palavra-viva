@@ -3,6 +3,7 @@ package com.palavraviva.app.data.repositories
 import com.palavraviva.app.data.local.AppDatabase
 import com.palavraviva.app.data.local.Book
 import com.palavraviva.app.data.local.Verse
+import com.palavraviva.app.data.local.VerseSearchResult
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -24,6 +25,12 @@ class BibleRepository(private val database: AppDatabase) {
         verseDao.versesOnce(bookId, chapter)
 
     suspend fun chapterCount(bookId: String): Int = verseDao.chapterCount(bookId)
+
+    suspend fun searchVerses(query: String, limit: Int = 80): List<VerseSearchResult> {
+        val trimmed = query.trim()
+        if (trimmed.length < 2) return emptyList()
+        return verseDao.search("%$trimmed%", limit)
+    }
 
     /**
      * Versículo do dia — determinístico pela data: um hash simples do dia do

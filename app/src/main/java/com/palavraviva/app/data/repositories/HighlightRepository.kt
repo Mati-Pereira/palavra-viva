@@ -18,6 +18,8 @@ class HighlightRepository(private val database: AppDatabase) {
     fun highlights(bookId: String, chapter: Int): Flow<List<Highlight>> =
         highlightDao.highlights(bookId, chapter)
 
+    fun allHighlights(): Flow<List<Highlight>> = highlightDao.allHighlights()
+
     suspend fun addHighlight(highlight: Highlight) =
         highlightDao.insert(highlight)
 
@@ -41,6 +43,8 @@ class HighlightRepository(private val database: AppDatabase) {
 
     fun notesFor(bookId: String, chapter: Int): Flow<List<Note>> =
         noteDao.notesFor(bookId, chapter)
+
+    fun allNotes(): Flow<List<Note>> = noteDao.allNotes()
 
     /**
      * Salva (insere quando `id == 0`, atualiza quando já tem id).

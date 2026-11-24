@@ -8,12 +8,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,15 +25,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.palavraviva.app.PalavraVivaApp
+import com.palavraviva.app.data.prefs.AiPrefs
 import com.palavraviva.app.data.prefs.AppearanceMode
 import com.palavraviva.app.data.prefs.AppearancePrefs
 import com.palavraviva.app.data.prefs.ReminderPrefs
 import com.palavraviva.app.notification.NotificationScheduler
 import com.palavraviva.app.ui.theme.Gold
+import com.palavraviva.app.ui.theme.Green
 import com.palavraviva.app.ui.theme.NightInk
 import com.palavraviva.app.ui.theme.Paper
 import com.palavraviva.app.ui.theme.Sepia
@@ -192,6 +201,8 @@ fun SettingsScreen(nav: NavController) {
 
         // Versão da Bíblia + atribuição obrigatória da licença (CC BY 3.0)
         val uriHandler = LocalUriHandler.current
+        AiStudySettingsCard(uriHandler = uriHandler)
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -302,6 +313,175 @@ private fun PreviewHalf(bg: Color, fg: Color) {
                 .height(5.dp)
                 .background(fg.copy(alpha = 0.3f), RoundedCornerShape(3.dp)),
         )
+    }
+}
+
+@Composable
+private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHandler) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    val savedApiKey by remember(context) { AiPrefs.apiKey(context) }.collectAsState(initial = "")
+    val savedModel by remember(context) { AiPrefs.model(context) }.collectAsState(initial = AiPrefs.DEFAULT_MODEL)
+    val availableModels by remember(context) { AiPrefs.availableModels(context) }
+        .collectAsState(initial = AiPrefs.FALLBACK_MODELS)
+
+    var apiKeyInput by remember(savedApiKey) { mutableStateOf(savedApiKey) }
+    var showKey by remember { mutableStateOf(false) }
+    var testing by remember { mutableStateOf(false) }
+    var statusMessage by remember { mutableStateOf<String?>(null) }
+    var statusIsError by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        shape = RoundedCornerShape(18.dp),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text("ASSISTENTE DE ESTUDO (IA)", style = MaterialTheme.typography.labelSmall)
+            Spacer(Modifier.height(6.dp))
+            Text(
+                "Explicações histórico-culturais, termos da época e chat sobre passagens. " +
+                    "Tudo que for gerado fica salvo offline no dispositivo.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = apiKeyInput,
+                onValueChange = {
+                    apiKeyInput = it
+                    statusMessage = null
+                },
+                label = { Text("Chave da API do Gemini") },
+                placeholder = { Text("Cole sua chave do Google AI Studio") },
+                singleLine = true,
+                visualTransformation = if (showKey) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    Row {
+                        if (apiKeyInput.isNotEmpty()) {
+                            IconButton(
+                                onClick = {
+                                    apiKeyInput = ""
+                                    statusMessage = null
+                                    scope.launch { AiPrefs.setApiKey(context, "") }
+                                },
+                            ) {
+                                Icon(Icons.Filled.Clear, contentDescription = "Limpar chave")
+                            }
+                        }
+                        IconButton(onClick = { showKey = !showKey }) {
+                            Icon(
+                                if (showKey) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                                contentDescription = if (showKey) "Ocultar chave" else "Mostrar chave",
+                            )
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        scope.launch {
+                            AiPrefs.setApiKey(context, apiKeyInput)
+                            statusIsError = false
+                            statusMessage = if (apiKeyInput.isBlank()) {
+                                "Chave removida."
+                            } else {
+                                "Chave salva localmente."
+                            }
+                        }
+                    },
+                    enabled = !testing && apiKeyInput.trim() != savedApiKey.trim(),
+                ) {
+                    Text("Salvar")
+                }
+
+                Button(
+                    onClick = {
+                        val candidate = apiKeyInput.trim()
+                        if (candidate.isEmpty()) {
+                            statusIsError = true
+                            statusMessage = "Informe uma chave da API do Gemini primeiro."
+                            return@Button
+                        }
+                        testing = true
+                        statusMessage = null
+                        scope.launch {
+                            val res = PalavraVivaApp.studyRepository.testAndFetchModels(candidate)
+                            testing = false
+                            res.onSuccess { models ->
+                                statusIsError = false
+                                statusMessage = "Conexão OK · ${models.size} modelos disponíveis."
+                            }.onFailure { err ->
+                                statusIsError = true
+                                statusMessage = err.message ?: "Não foi possível validar a chave."
+                            }
+                        }
+                    },
+                    enabled = !testing,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    if (testing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    Text(if (testing) "Testando..." else "Testar conexão")
+                }
+            }
+
+            statusMessage?.let { msg ->
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    msg,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (statusIsError) MaterialTheme.colorScheme.error else Green,
+                )
+            }
+
+            Spacer(Modifier.height(14.dp))
+            Text("MODELO GEMINI", style = MaterialTheme.typography.labelSmall)
+            Spacer(Modifier.height(6.dp))
+            val modelChoices = remember(availableModels, savedModel) {
+                if (savedModel in availableModels) availableModels else listOf(savedModel) + availableModels
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                modelChoices.forEach { modelId ->
+                    FilterChip(
+                        selected = savedModel == modelId,
+                        onClick = { scope.launch { AiPrefs.setModel(context, modelId) } },
+                        label = { Text(modelId, fontSize = 12.sp) },
+                    )
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(
+                "Gerar chave gratuita no Google AI Studio (aistudio.google.com/apikey)",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    runCatching { uriHandler.openUri("https://aistudio.google.com/apikey") }
+                },
+            )
+        }
     }
 }
 

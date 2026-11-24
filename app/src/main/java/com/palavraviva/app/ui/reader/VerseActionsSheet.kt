@@ -18,11 +18,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +58,8 @@ fun VerseActionsSheet(
     highlight: Highlight?,
     bookmark: BookmarkEntity?,
     note: Note?,
+    hasCachedStudy: Boolean,
+    onOpenStudy: () -> Unit,
     onToggleHighlight: (Int) -> Unit,
     onToggleBookmark: () -> Unit,
     onSaveBookmarkLabel: (String) -> Unit,
@@ -87,7 +91,26 @@ fun VerseActionsSheet(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(14.dp))
+
+            // Estudo bíblico contextual (IA + glossário offline)
+            FilledTonalButton(
+                onClick = onOpenStudy,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Icon(
+                    Icons.Filled.AutoAwesome,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    if (hasCachedStudy) "Estudar esta passagem · Salvo offline"
+                    else "Estudar esta passagem",
+                )
+            }
+            Spacer(Modifier.height(18.dp))
 
             // Destaque — paleta de 4 cores
             SectionLabel("DESTAQUE")

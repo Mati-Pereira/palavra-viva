@@ -7,10 +7,12 @@ import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.EventNote
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.School
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,10 +35,12 @@ import com.palavraviva.app.ui.screens.PlansScreen
 import com.palavraviva.app.ui.screens.ProgressScreen
 import com.palavraviva.app.ui.screens.ReaderScreen
 import com.palavraviva.app.ui.screens.SettingsScreen
+import com.palavraviva.app.ui.screens.StudyHubScreen
 
 object Routes {
     const val HOME = "home"
     const val READER = "reader/{book}/{chapter}"
+    const val STUDY = "study"
     const val PLANS = "plans"
     const val PLAN_DETAIL = "plan/{planId}"
     const val PROGRESS = "progress"
@@ -61,6 +65,7 @@ private data class Tab(
 private val tabs = listOf(
     Tab(Routes.HOME, "Início", Icons.Outlined.Home, Icons.Filled.Home),
     Tab(READER_TAB, "Bíblia", Icons.Outlined.AutoStories, Icons.Filled.AutoStories),
+    Tab(Routes.STUDY, "Estudo", Icons.Outlined.School, Icons.Filled.School),
     Tab(Routes.PLANS, "Planos", Icons.Outlined.EventNote, Icons.Filled.EventNote),
     Tab(Routes.PROGRESS, "Perfil", Icons.Outlined.Person, Icons.Filled.Person),
 )
@@ -117,6 +122,7 @@ fun PalavraVivaApp() {
                 val chapter = entry.arguments?.getString("chapter")?.toIntOrNull() ?: 1
                 ReaderScreen(book, chapter, navController)
             }
+            composable(Routes.STUDY) { StudyHubScreen(navController) }
             composable(Routes.PLANS) { PlansScreen(navController) }
             composable(Routes.PLAN_DETAIL) { entry ->
                 PlanDetailScreen(entry.arguments?.getString("planId") ?: "anual", navController)

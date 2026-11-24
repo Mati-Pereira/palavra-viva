@@ -9,6 +9,8 @@ import com.palavraviva.app.data.repositories.BibleRepository
 import com.palavraviva.app.data.repositories.HighlightRepository
 import com.palavraviva.app.data.repositories.PlanRepository
 import com.palavraviva.app.data.repositories.ProgressRepository
+import com.palavraviva.app.data.repositories.StudyRepository
+import com.palavraviva.app.data.study.GlossaryImporter
 import com.palavraviva.app.notification.NotificationScheduler
 import com.palavraviva.app.widget.VerseOfDayGlanceWidget
 import kotlinx.coroutines.CoroutineScope
@@ -35,11 +37,13 @@ class PalavraVivaApp : Application() {
         planRepository = PlanRepository(database)
         progressRepository = ProgressRepository(database)
         highlightRepository = HighlightRepository(database)
+        studyRepository = StudyRepository(this, database)
 
-        // Primeiro início: importa assets/bible/*.json e semeia planos.
+        // Primeiro início: importa assets/bible/*.json, semeia planos e glossário offline.
         // Ao final, atualiza o widget para trocar o fallback pelo versículo real.
         applicationScope.launch {
             BibleImporter.seed(this@PalavraVivaApp, database)
+            GlossaryImporter.seed(this@PalavraVivaApp, database)
             runCatching { VerseOfDayGlanceWidget.updateAll(this@PalavraVivaApp) }
         }
 
@@ -61,6 +65,8 @@ class PalavraVivaApp : Application() {
         lateinit var progressRepository: ProgressRepository
             private set
         lateinit var highlightRepository: HighlightRepository
+            private set
+        lateinit var studyRepository: StudyRepository
             private set
     }
 }

@@ -17,4 +17,7 @@ interface HighlightDao {
 
     @Query("SELECT * FROM Highlight WHERE bookId = :bookId AND chapter = :chapter ORDER BY verse")
     fun highlights(bookId: String, chapter: Int): Flow<List<Highlight>>
+
+    @Query("SELECT * FROM Highlight ORDER BY createdAt DESC")
+    fun allHighlights(): Flow<List<Highlight>>
 }

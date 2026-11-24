@@ -37,4 +37,21 @@ interface VerseDao {
             "ORDER BY Book.bookOrder, Verse.chapter, Verse.verse LIMIT 1 OFFSET :position",
     )
     suspend fun verseAtPosition(position: Int): Verse?
+
+    @Query(
+        "SELECT Verse.bookId, Book.name AS bookName, Verse.chapter, Verse.verse, Verse.text " +
+            "FROM Verse JOIN Book ON Book.bookId = Verse.bookId " +
+            "WHERE Verse.text LIKE :pattern " +
+            "ORDER BY Book.bookOrder, Verse.chapter, Verse.verse LIMIT :limit",
+    )
+    suspend fun search(pattern: String, limit: Int = 80): List<VerseSearchResult>
 }
+
+/** Resultado leve da busca offline de versículos. */
+data class VerseSearchResult(
+    val bookId: String,
+    val bookName: String,
+    val chapter: Int,
+    val verse: Int,
+    val text: String,
+)

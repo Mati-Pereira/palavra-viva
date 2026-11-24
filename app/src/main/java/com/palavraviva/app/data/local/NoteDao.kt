@@ -18,4 +18,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM Note WHERE bookId = :bookId AND chapter = :chapter ORDER BY verse")
     fun notesFor(bookId: String, chapter: Int): Flow<List<Note>>
+
+    @Query("SELECT * FROM Note ORDER BY editedAt DESC")
+    fun allNotes(): Flow<List<Note>>
 }
