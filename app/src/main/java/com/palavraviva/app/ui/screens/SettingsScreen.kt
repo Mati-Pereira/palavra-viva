@@ -33,6 +33,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.palavraviva.app.PalavraVivaApp
 import com.palavraviva.app.data.prefs.AiPrefs
+import com.palavraviva.app.data.prefs.AiProvider
 import com.palavraviva.app.data.prefs.AppearanceMode
 import com.palavraviva.app.data.prefs.AppearancePrefs
 import com.palavraviva.app.data.prefs.ReminderPrefs
@@ -321,12 +322,16 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val savedApiKey by remember(context) { AiPrefs.apiKey(context) }.collectAsState(initial = "")
-    val savedModel by remember(context) { AiPrefs.model(context) }.collectAsState(initial = AiPrefs.DEFAULT_MODEL)
-    val availableModels by remember(context) { AiPrefs.availableModels(context) }
-        .collectAsState(initial = AiPrefs.FALLBACK_MODELS)
+    val savedProvider by remember(context) { AiPrefs.provider(context) }
+        .collectAsState(initial = AiProvider.GEMINI)
+    val savedApiKey by remember(context, savedProvider) { AiPrefs.apiKey(context, savedProvider) }
+        .collectAsState(initial = "")
+    val savedModel by remember(context, savedProvider) { AiPrefs.model(context, savedProvider) }
+        .collectAsState(initial = savedProvider.defaultModel)
+    val availableModels by remember(context, savedProvider) { AiPrefs.availableModels(context, savedProvider) }
+        .collectAsState(initial = savedProvider.fallbackModels)
 
-    var apiKeyInput by remember(savedApiKey) { mutableStateOf(savedApiKey) }
+    var apiKeyInput by remember(savedProvider, savedApiKey) { mutableStateOf(savedApiKey) }
     var showKey by remember { mutableStateOf(false) }
     var testing by remember { mutableStateOf(false) }
     var statusMessage by remember { mutableStateOf<String?>(null) }
@@ -349,14 +354,35 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
             )
             Spacer(Modifier.height(12.dp))
 
+            Text("PROVEDOR DE IA", style = MaterialTheme.typography.labelSmall)
+            Spacer(Modifier.height(6.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                AiProvider.entries.forEach { provider ->
+                    FilterChip(
+                        selected = savedProvider == provider,
+                        onClick = {
+                            statusMessage = null
+                            scope.launch { AiPrefs.setProvider(context, provider) }
+                        },
+                        label = { Text(provider.label) },
+                    )
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+
             OutlinedTextField(
                 value = apiKeyInput,
                 onValueChange = {
                     apiKeyInput = it
                     statusMessage = null
                 },
-                label = { Text("Chave da API do Gemini") },
-                placeholder = { Text("Cole sua chave do Google AI Studio") },
+                label = { Text("Chave da API (${savedProvider.label})") },
+                placeholder = { Text(savedProvider.keyHint) },
                 singleLine = true,
                 visualTransformation = if (showKey) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
@@ -366,7 +392,7 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
                                 onClick = {
                                     apiKeyInput = ""
                                     statusMessage = null
-                                    scope.launch { AiPrefs.setApiKey(context, "") }
+                                    scope.launch { AiPrefs.setApiKey(context, savedProvider, "") }
                                 },
                             ) {
                                 Icon(Icons.Filled.Clear, contentDescription = "Limpar chave")
@@ -392,7 +418,7 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
                 OutlinedButton(
                     onClick = {
                         scope.launch {
-                            AiPrefs.setApiKey(context, apiKeyInput)
+                            AiPrefs.setApiKey(context, savedProvider, apiKeyInput)
                             statusIsError = false
                             statusMessage = if (apiKeyInput.isBlank()) {
                                 "Chave removida."
@@ -411,17 +437,17 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
                         val candidate = apiKeyInput.trim()
                         if (candidate.isEmpty()) {
                             statusIsError = true
-                            statusMessage = "Informe uma chave da API do Gemini primeiro."
+                            statusMessage = "Informe uma chave da API (${savedProvider.label}) primeiro."
                             return@Button
                         }
                         testing = true
                         statusMessage = null
                         scope.launch {
-                            val res = PalavraVivaApp.studyRepository.testAndFetchModels(candidate)
+                            val res = PalavraVivaApp.studyRepository.testAndFetchModels(savedProvider, candidate)
                             testing = false
                             res.onSuccess { models ->
                                 statusIsError = false
-                                statusMessage = "Conexão OK · ${models.size} modelos disponíveis."
+                                statusMessage = "${savedProvider.label} OK · ${models.size} modelos disponíveis."
                             }.onFailure { err ->
                                 statusIsError = true
                                 statusMessage = err.message ?: "Não foi possível validar a chave."
@@ -453,7 +479,7 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
             }
 
             Spacer(Modifier.height(14.dp))
-            Text("MODELO GEMINI", style = MaterialTheme.typography.labelSmall)
+            Text("MODELO (${savedProvider.label.uppercase()})", style = MaterialTheme.typography.labelSmall)
             Spacer(Modifier.height(6.dp))
             val modelChoices = remember(availableModels, savedModel) {
                 if (savedModel in availableModels) availableModels else listOf(savedModel) + availableModels
@@ -467,18 +493,18 @@ private fun AiStudySettingsCard(uriHandler: androidx.compose.ui.platform.UriHand
                 modelChoices.forEach { modelId ->
                     FilterChip(
                         selected = savedModel == modelId,
-                        onClick = { scope.launch { AiPrefs.setModel(context, modelId) } },
+                        onClick = { scope.launch { AiPrefs.setModel(context, savedProvider, modelId) } },
                         label = { Text(modelId, fontSize = 12.sp) },
                     )
                 }
             }
             Spacer(Modifier.height(6.dp))
             Text(
-                "Gerar chave gratuita no Google AI Studio (aistudio.google.com/apikey)",
+                savedProvider.keyUrlLabel,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    runCatching { uriHandler.openUri("https://aistudio.google.com/apikey") }
+                    runCatching { uriHandler.openUri(savedProvider.keyUrl) }
                 },
             )
         }

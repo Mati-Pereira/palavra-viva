@@ -121,10 +121,10 @@ object StudyJsonParser {
     }.toString()
 
     internal fun stripMarkdownFences(raw: String): String {
-        val trimmed = raw.trim()
-        if (!trimmed.startsWith("```")) return trimmed
-        val firstNewLine = trimmed.indexOf('\n')
-        val withoutStart = if (firstNewLine >= 0) trimmed.substring(firstNewLine + 1) else trimmed.removePrefix("```")
+        val withoutThink = raw.replace(Regex("(?is)<think>.*?</think>"), "").trim()
+        if (!withoutThink.startsWith("```")) return withoutThink
+        val firstNewLine = withoutThink.indexOf('\n')
+        val withoutStart = if (firstNewLine >= 0) withoutThink.substring(firstNewLine + 1) else withoutThink.removePrefix("```")
         val endFence = withoutStart.lastIndexOf("```")
         return (if (endFence >= 0) withoutStart.substring(0, endFence) else withoutStart).trim()
     }

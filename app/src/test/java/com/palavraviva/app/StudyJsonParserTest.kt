@@ -106,4 +106,32 @@ class StudyJsonParserTest {
         }
         assertTrue(caught is AiError.ParseError)
     }
+
+    @Test
+    fun stripsReasoningThinkTagsBeforeParsingVerseStudy() {
+        val raw = """
+            <think>
+            Analisando o contexto de Lucas 18:13 e o termo publicano.
+            </think>
+            ```json
+            {
+              "summary": "O cobrador de impostos pede misericórdia com humildade.",
+              "historicalContext": "Publicanos trabalhavam para o sistema tributário romano.",
+              "periodTerms": [
+                {
+                  "term": "Publicano",
+                  "originalWord": "telōnēs (grego)",
+                  "meaning": "Arrecadador de tributos locais."
+                }
+              ],
+              "crossReferences": []
+            }
+            ```
+        """.trimIndent()
+
+        val parsed = StudyJsonParser.parseVerseStudy(raw)
+        assertEquals("O cobrador de impostos pede misericórdia com humildade.", parsed.summary)
+        assertEquals(1, parsed.periodTerms.size)
+        assertEquals("Publicano", parsed.periodTerms[0].term)
+    }
 }

@@ -5,6 +5,7 @@ import com.palavraviva.app.data.ai.AiError
 import com.palavraviva.app.data.ai.ChapterGuide
 import com.palavraviva.app.data.ai.GeminiModelInfo
 import com.palavraviva.app.data.ai.GeminiStudyClient
+import com.palavraviva.app.data.ai.OpenAiCompatibleStudyClient
 import com.palavraviva.app.data.ai.StudyJsonParser
 import com.palavraviva.app.data.ai.StudyPrompts
 import com.palavraviva.app.data.ai.VerseStudy
@@ -15,9 +16,12 @@ import com.palavraviva.app.data.local.StudyCache
 import com.palavraviva.app.data.local.StudyChatMessage
 import com.palavraviva.app.data.local.Verse
 import com.palavraviva.app.data.prefs.AiPrefs
+import com.palavraviva.app.data.prefs.AiProvider
 import com.palavraviva.app.data.study.GlossaryMatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 /** Resultado de estudo com indicação de origem (cache offline vs. geração online). */
@@ -29,12 +33,14 @@ data class StudyResult<T>(
 
 /**
  * Orquestra o estudo bíblico: cache offline no Room, glossário embutido,
- * chat contextual persistido e chamadas à API do Gemini quando necessário.
+ * chat contextual persistido e chamadas ao provedor de IA ativo (Gemini, Groq ou OpenRouter).
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class StudyRepository(
     private val context: Context,
     database: AppDatabase,
-    private val client: GeminiStudyClient = GeminiStudyClient(),
+    private val geminiClient: GeminiStudyClient = GeminiStudyClient(),
+    private val openAiClient: OpenAiCompatibleStudyClient = OpenAiCompatibleStudyClient(),
 ) {
 
     private val cacheDao = database.studyCacheDao()
@@ -73,11 +79,13 @@ class StudyRepository(
             }
         }
 
-        val apiKey = AiPrefs.apiKey(context).first()
+        val provider = AiPrefs.provider(context).first()
+        val apiKey = AiPrefs.apiKey(context, provider).first()
         if (apiKey.isBlank()) {
             return Result.failure(AiError.MissingApiKey())
         }
-        val model = AiPrefs.model(context).first()
+        val model = AiPrefs.model(context, provider).first()
+        val modelLabel = "${provider.label} · $model"
 
         val surrounding = buildSurroundingExcerpt(chapterVerses, verse.verse)
         val prompt = StudyPrompts.buildVerseStudyPrompt(
@@ -90,10 +98,10 @@ class StudyRepository(
         )
 
         return runCatching {
-            val rawJson = client.generateStructuredJson(
+            val rawJson = requestStructuredJson(
+                provider = provider,
                 apiKey = apiKey,
                 model = model,
-                systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
                 userPrompt = prompt,
             )
             val parsed = StudyJsonParser.parseVerseStudy(rawJson)
@@ -107,11 +115,11 @@ class StudyRepository(
                     verse = verse.verse,
                     title = "${book.name} $chapter:${verse.verse}",
                     payloadJson = canonicalJson,
-                    model = model,
+                    model = modelLabel,
                     createdAt = System.currentTimeMillis(),
                 ),
             )
-            StudyResult(parsed, fromCache = false, model = model)
+            StudyResult(parsed, fromCache = false, model = modelLabel)
         }
     }
 
@@ -132,11 +140,13 @@ class StudyRepository(
             }
         }
 
-        val apiKey = AiPrefs.apiKey(context).first()
+        val provider = AiPrefs.provider(context).first()
+        val apiKey = AiPrefs.apiKey(context, provider).first()
         if (apiKey.isBlank()) {
             return Result.failure(AiError.MissingApiKey())
         }
-        val model = AiPrefs.model(context).first()
+        val model = AiPrefs.model(context, provider).first()
+        val modelLabel = "${provider.label} · $model"
 
         val chapterText = buildChapterExcerpt(chapterVerses, maxChars = 14_000)
         val prompt = StudyPrompts.buildChapterGuidePrompt(
@@ -147,10 +157,10 @@ class StudyRepository(
         )
 
         return runCatching {
-            val rawJson = client.generateStructuredJson(
+            val rawJson = requestStructuredJson(
+                provider = provider,
                 apiKey = apiKey,
                 model = model,
-                systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
                 userPrompt = prompt,
             )
             val parsed = StudyJsonParser.parseChapterGuide(rawJson)
@@ -164,11 +174,11 @@ class StudyRepository(
                     verse = null,
                     title = "${book.name} $chapter",
                     payloadJson = canonicalJson,
-                    model = model,
+                    model = modelLabel,
                     createdAt = System.currentTimeMillis(),
                 ),
             )
-            StudyResult(parsed, fromCache = false, model = model)
+            StudyResult(parsed, fromCache = false, model = modelLabel)
         }
     }
 
@@ -183,23 +193,35 @@ class StudyRepository(
         val trimmed = userMessage.trim()
         if (trimmed.isEmpty()) return Result.success(Unit)
 
-        val apiKey = AiPrefs.apiKey(context).first()
+        val provider = AiPrefs.provider(context).first()
+        val apiKey = AiPrefs.apiKey(context, provider).first()
         if (apiKey.isBlank()) {
             return Result.failure(AiError.MissingApiKey())
         }
-        val model = AiPrefs.model(context).first()
+        val model = AiPrefs.model(context, provider).first()
 
         val priorHistory = chatDao.messagesOnce(scopeKey).takeLast(12).map { it.role to it.text }
         val userTime = System.currentTimeMillis()
         val replyResult = runCatching {
-            client.generateChatReply(
-                apiKey = apiKey,
-                model = model,
-                systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
-                contextPrefix = contextPrefix,
-                history = priorHistory,
-                userMessage = trimmed,
-            )
+            when (provider) {
+                AiProvider.GEMINI -> geminiClient.generateChatReply(
+                    apiKey = apiKey,
+                    model = model,
+                    systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
+                    contextPrefix = contextPrefix,
+                    history = priorHistory,
+                    userMessage = trimmed,
+                )
+                AiProvider.GROQ, AiProvider.OPENROUTER -> openAiClient.generateChatReply(
+                    provider = provider,
+                    apiKey = apiKey,
+                    model = model,
+                    systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
+                    contextPrefix = contextPrefix,
+                    history = priorHistory,
+                    userMessage = trimmed,
+                )
+            }
         }
 
         return replyResult.map { replyText ->
@@ -243,24 +265,55 @@ class StudyRepository(
 
     /**
      * Valida a chave informada consultando os modelos disponíveis na conta e
-     * atualiza o catálogo salvo em [AiPrefs].
+     * atualiza o catálogo salvo para o [provider] selecionado em [AiPrefs].
      */
-    suspend fun testAndFetchModels(apiKey: String): Result<List<GeminiModelInfo>> = runCatching {
-        val models = client.listAvailableModels(apiKey)
+    suspend fun testAndFetchModels(provider: AiProvider, apiKey: String): Result<List<GeminiModelInfo>> = runCatching {
+        val models = when (provider) {
+            AiProvider.GEMINI -> geminiClient.listAvailableModels(apiKey)
+            AiProvider.GROQ, AiProvider.OPENROUTER -> openAiClient.listAvailableModels(provider, apiKey)
+        }
         val ids = models.map { it.id }
-        AiPrefs.setApiKey(context, apiKey)
-        AiPrefs.setAvailableModels(context, ids)
+        AiPrefs.setProvider(context, provider)
+        AiPrefs.setApiKey(context, provider, apiKey)
+        AiPrefs.setAvailableModels(context, provider, ids)
 
-        val currentModel = AiPrefs.model(context).first()
+        val currentModel = AiPrefs.model(context, provider).first()
         if (currentModel !in ids && ids.isNotEmpty()) {
-            AiPrefs.setModel(context, ids.first())
+            AiPrefs.setModel(context, provider, ids.first())
         }
         models
     }
 
-    suspend fun hasApiKey(): Boolean = AiPrefs.apiKey(context).first().isNotBlank()
+    suspend fun hasApiKey(): Boolean {
+        val provider = AiPrefs.provider(context).first()
+        return AiPrefs.apiKey(context, provider).first().isNotBlank()
+    }
 
-    fun observeHasApiKey(): Flow<Boolean> = AiPrefs.apiKey(context).map { it.isNotBlank() }
+    fun observeHasApiKey(): Flow<Boolean> =
+        AiPrefs.provider(context).flatMapLatest { provider ->
+            AiPrefs.apiKey(context, provider).map { it.isNotBlank() }
+        }
+
+    private suspend fun requestStructuredJson(
+        provider: AiProvider,
+        apiKey: String,
+        model: String,
+        userPrompt: String,
+    ): String = when (provider) {
+        AiProvider.GEMINI -> geminiClient.generateStructuredJson(
+            apiKey = apiKey,
+            model = model,
+            systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
+            userPrompt = userPrompt,
+        )
+        AiProvider.GROQ, AiProvider.OPENROUTER -> openAiClient.generateStructuredJson(
+            provider = provider,
+            apiKey = apiKey,
+            model = model,
+            systemInstruction = StudyPrompts.SYSTEM_INSTRUCTION,
+            userPrompt = userPrompt,
+        )
+    }
 
     private fun buildSurroundingExcerpt(verses: List<Verse>, targetVerse: Int): String {
         val window = verses.filter { it.verse in (targetVerse - 3)..(targetVerse + 3) }

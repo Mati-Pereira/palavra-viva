@@ -76,7 +76,7 @@ fun StudyChatPanel(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        "Adicione sua chave do Gemini nos Ajustes para conversar com a IA sobre esta passagem.",
+                        "Adicione sua chave de IA (Gemini, Groq ou OpenRouter) nos Ajustes para conversar sobre esta passagem.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

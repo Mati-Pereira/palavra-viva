@@ -237,7 +237,7 @@ private fun ChapterGuideContent(
 
         state.missingApiKey || !hasApiKey -> {
             MissingApiKeyCard(
-                description = "Configure sua chave da API do Gemini nos Ajustes para gerar o guia histórico deste capítulo (com salvamento offline automático).",
+                description = "Configure sua chave da API de IA (Gemini, Groq ou OpenRouter) nos Ajustes para gerar o guia histórico deste capítulo (com salvamento offline automático).",
                 onOpenSettings = onOpenSettings,
             )
         }

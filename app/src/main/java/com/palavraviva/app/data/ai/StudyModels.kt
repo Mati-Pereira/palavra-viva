@@ -40,9 +40,9 @@ data class GeminiModelInfo(
 
 /** Erros tipados das chamadas ao assistente de IA. */
 sealed class AiError(override val message: String) : Exception(message) {
-    class MissingApiKey : AiError("Configure sua chave da API do Gemini nos Ajustes para usar a IA.")
+    class MissingApiKey : AiError("Configure sua chave da API de IA nos Ajustes para usar este recurso.")
     class InvalidApiKey(detail: String? = null) : AiError(
-        detail ?: "Chave da API do Gemini inválida ou sem permissão. Verifique em Ajustes.",
+        detail ?: "Chave da API inválida ou sem permissão. Verifique em Ajustes.",
     )
     class NetworkError : AiError("Sem conexão com a internet. Estudos já salvos continuam disponíveis offline.")
     class RateLimited : AiError("Limite temporário de requisições da API atingido. Aguarde um instante e tente novamente.")

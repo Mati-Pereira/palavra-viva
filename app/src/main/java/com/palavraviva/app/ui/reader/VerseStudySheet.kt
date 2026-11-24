@@ -338,7 +338,7 @@ private fun VerseStudyContent(
 
         state.missingApiKey || !hasApiKey -> {
             MissingApiKeyCard(
-                description = "Configure sua chave da API do Gemini nos Ajustes para gerar explicações detalhadas, termos originais e referências cruzadas com cache offline.",
+                description = "Configure sua chave da API de IA (Gemini, Groq ou OpenRouter) nos Ajustes para gerar explicações detalhadas, termos originais e referências cruzadas com cache offline.",
                 onOpenSettings = onOpenSettings,
             )
         }
